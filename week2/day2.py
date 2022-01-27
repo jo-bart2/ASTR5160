@@ -33,6 +33,21 @@ def match(ra, dec):
         print('RA and Dec Calculations Incorrect')
         print(str(rdeg)+' does not equal '+str(deg.ra.degree)+', '+str(ddeg)+' does not equal '+str(deg.dec.degree))
 
+#JAB Run match function to confirm that astropy function is the same as given equations
 match(r,d)
+
+#Determine current JD and MJD
+date = Time(Time.now())
+mjd = date.mjd
+jd = date.jd
+print(jd-2400000.5)
+print(mjd)
+
+if round(mjd,9) == round(jd-2400000.5,9):
+    print('Calculations correct: MJD = JD - 2400000.5')
+else:
+    print('Calculations incorrect: MJD != JD - 2400000.5')
+
+
 
 
