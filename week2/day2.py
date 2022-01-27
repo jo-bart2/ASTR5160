@@ -36,17 +36,21 @@ def match(ra, dec):
 #JAB Run match function to confirm that astropy function is the same as given equations
 match(r,d)
 
-#Determine current JD and MJD
+#JAB Determine current JD and MJD
 date = Time(Time.now())
 mjd = date.mjd
 jd = date.jd
-print(jd-2400000.5)
-print(mjd)
 
+#JAB Confirm JD and MJD are accurate to given equations
 if round(mjd,9) == round(jd-2400000.5,9):
     print('Calculations correct: MJD = JD - 2400000.5')
 else:
     print('Calculations incorrect: MJD != JD - 2400000.5')
+
+#JAB List days near today's MJD
+days = np.arange(mjd-10,mjd+10)
+print('The following list is MJDs from the current MJD-10 to MJD+10:')
+print(days)
 
 
 
