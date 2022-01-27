@@ -26,12 +26,12 @@ def match(ra, dec):
     rdeg = 15*(int(rlist[0]) + int(rlist[1])/60 + int(rlist[2])/3600)
     ddeg = int(dlist[0]) + int(dlist[1])/60 + int(dlist[2])/3600
     
-    if rdeg == round(deg.ra.degree,3) & ddeg == round(deg.dec.degree,3):
+    if round(rdeg,3) == round(deg.ra.degree,3) and round(ddeg,3) == round(deg.dec.degree,3):
         print('RA and Dec Calculations Correct')
         print(str(rdeg)+' = '+str(deg.ra.degree)+', '+str(ddeg)+' = '+str(deg.dec.degree))
     else:
         print('RA and Dec Calculations Incorrect')
-        print(str(rdeg)+' does not equal '+str(deg.ra.degree))
+        print(str(rdeg)+' does not equal '+str(deg.ra.degree)+', '+str(ddeg)+' does not equal '+str(deg.dec.degree))
 
 match(r,d)
 
