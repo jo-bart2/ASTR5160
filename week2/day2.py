@@ -42,7 +42,7 @@ mjd = date.mjd
 jd = date.jd
 
 #JAB Confirm JD and MJD are accurate to given equations
-if round(mjd,9) == round(jd-2400000.5,9):
+if round(mjd,8) == round(jd-2400000.5,8):
     print('Calculations correct: MJD = JD - 2400000.5')
 else:
     print('Calculations incorrect: MJD != JD - 2400000.5')
