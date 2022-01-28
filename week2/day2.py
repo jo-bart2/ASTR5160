@@ -1,6 +1,7 @@
 import numpy as np
-from astropy.coordinates import SkyCoord, EarthLocation
+from astropy.coordinates import SkyCoord, EarthLocation, AltAz
 from astropy.time import Time
+import astropy.units as u
 
 #JAB RA and Dec of the star Procyon
 r = '07h39m18s' #RA
@@ -27,10 +28,10 @@ def match(ra, dec):
     ddeg = int(dlist[0]) + int(dlist[1])/60 + int(dlist[2])/3600
     
     if round(rdeg,3) == round(deg.ra.degree,3) and round(ddeg,3) == round(deg.dec.degree,3):
-        print('RA and Dec Calculations Correct')
+        print('RA and Dec Calculations Correct:')
         print(str(rdeg)+' = '+str(deg.ra.degree)+', '+str(ddeg)+' = '+str(deg.dec.degree))
     else:
-        print('RA and Dec Calculations Incorrect')
+        print('RA and Dec Calculations Incorrect:')
         print(str(rdeg)+' does not equal '+str(deg.ra.degree)+', '+str(ddeg)+' does not equal '+str(deg.dec.degree))
 
 #JAB Run match function to confirm that astropy function is the same as given equations
@@ -58,12 +59,19 @@ long = 105+(58/60)+(33/3600)
 h = 2943
 wiro = EarthLocation(lat=lati,lon=long,height=h)
 
-#JAB Find airmass towards star
-alpha = 12*15 #RA in degrees
-delta = 30 #degrees
+#JAB Find airmass towards star at 12h, 30N
+coord = SkyCoord('12h','30d', frame='icrs')
+utcoffset = -7*u.hour #utc offset from MST
 
-
-
-
+#JAB Find airmass at 11pm tonight
+now11 = Time('2022-1-28 23:00:00') - utcoffset #Find date and time of observation
+staraltaz_now = coord.transform_to(AltAz(obstime=now11,location=wiro)) #find alt az of star
+starairmass_now = staraltaz_now.secz #convert alt az to airmass
+print('The airmass of the star is '+str(starairmass_now)+' at 11pm today')
+#JAB Find airmass at 11pm next month
+next11 = Time('2022-2-28 23:00:00') - utcoffset #Find date and time of observation
+staraltaz_next = coord.transform_to(AltAz(obstime=next11,location=wiro)) #find alt az of star
+starairmass_next = staraltaz_next.secz #convert alt az to airmass
+print('The airmass of the star is '+str(starairmass_next)+' at 11pm 1 month from now')
 
 
