@@ -1,6 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
-from astropy.table import Table
+from astropy.table import Table, QTable
 
 #JAB Read in the fits file
 objs = Table.read("/d/scratch/ASTR5160/week2/struc.fits")
@@ -22,7 +22,8 @@ random1 = np.random.randint(0,101,100)
 random2 = np.random.randint(0,101,100)
 random3 = np.random.randint(0,101,100)
 
-randomnum = np.array((random1,random2,random3))
-print(randomnum)
-print(randomnum[:,0])
-#
+randomnum = np.array((random1,random2,random3)).reshape((100,3))
+
+#JAB Create rec array with ra, dec, and randomnum
+table = QTable([objs["RA"],objs["DEC"],randomnum],names=('ra','dec','randomnum'))
+print(table)
