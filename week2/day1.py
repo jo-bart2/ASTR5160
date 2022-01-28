@@ -26,4 +26,6 @@ randomnum = np.array((random1,random2,random3)).reshape((100,3))
 
 #JAB Create rec array with ra, dec, and randomnum
 table = QTable([objs["RA"],objs["DEC"],randomnum],names=('ra','dec','randomnum'))
-print(table)
+
+#JAB Write rec array to fits file
+table.write('recarray.fits', overwrite=True)
