@@ -18,3 +18,11 @@ plt.legend()
 plt.show()
 
 #JAB Create 3-array of random numbers
+random1 = np.random.randint(0,101,100)
+random2 = np.random.randint(0,101,100)
+random3 = np.random.randint(0,101,100)
+
+randomnum = np.array((random1,random2,random3))
+print(randomnum)
+print(randomnum[:,0])
+#
