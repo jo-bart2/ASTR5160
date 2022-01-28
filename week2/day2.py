@@ -1,6 +1,7 @@
 import numpy as np
 from astropy.coordinates import SkyCoord
 from astropy.time import Time
+from astropy.coordinates import EarthLocation
 
 #JAB RA and Dec of the star Procyon
 r = '07h39m18s' #RA
@@ -51,6 +52,9 @@ else:
 days = np.arange(mjd-10,mjd+10)
 print('The following list is MJDs from the current MJD-10 to MJD+10:')
 print(days)
+
+#JAB Set location of WIRO
+
 
 
 
