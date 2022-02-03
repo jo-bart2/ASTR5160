@@ -17,21 +17,23 @@ print('z = ' + str(coords.z))
 #JAB Check SkyCoord matches given equations
 def convert(Ra,Dec):
     coor = SkyCoord(Ra,Dec,frame='icrs')
-    print(coor.dec.degree)
-    new_x = float(np.cos(coor.ra.degree)*np.cos(coor.dec.degree))
-    new_y = float(np.sin(coor.ra.degree)*np.cos(coor.dec.degree))
-    new_z = float(np.sin(coor.dec.degree))
+    #print(coor.dec.degree)
+    new_x = np.cos(coor.ra.degree)*np.cos(coor.dec.degree)
+    new_y = np.sin(coor.ra.degree)*np.cos(coor.dec.degree)
+    new_z = np.sin(coor.dec.degree)
     
     return new_x,new_y,new_z
 
 def match(Ra,Dec,x,y,z):
-    x = float(x)
-    y = float(y)
-    z = float(z)
+    print(x)
+    #x = float(x)
+    #y = float(y)
+    #z = float(z)
     
     x2,y2,z2 = convert(Ra,Dec)
     
-    if round(x2,4) == round(x,4) and round(y2,4) == round(y,4) and round(z2,4) == round(z,4):
+    if x2 == x and y2 == y and z2 == z:
+    #if round(x2,4) == round(x,4) and round(y2,4) == round(y,4) and round(z2,4) == round(z,4):
         print('SkyCoord output matches given equations')
         print(x,y,z)
         print(x2,y2,z2 )
