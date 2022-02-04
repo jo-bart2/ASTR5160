@@ -1,8 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from scipy.optimize import curve_fit
 
 #JAB Problem 1: Create function to return x,y, and y_err
-def linear(m,b):
+def CreateArrays(m,b):
     """
 
     Parameters
@@ -35,7 +36,13 @@ def linear(m,b):
     return x, offset, y_err
 
 #JAB Problem 2: Fit a straight line and recover values of m2 and b2
+x, y, y_err = CreateArrays(2,1) #Given values of m=2, b=1
 
+def linear(x2,m2,b2):
+    return m2*x2 + b2
+
+popt, pcov = curve_fit(linear,x,y,sigma=y_err)
+print('The recovered values are: m = '+str(popt[0])+', b = '+str(popt[1]))
 
 
 
