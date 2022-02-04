@@ -96,14 +96,18 @@ def allTogether(dec,sids,loc):
     
     for x in lst:
         gals = EquToGal(x,dec)
-        ls.append(gals.l)
-        bs.append(gals.b)
+        ls.append(gals.l.degree)
+        bs.append(gals.b.degree)
     
     return ls,bs
 
 times = makeTime()
 l_list,b_list = allTogether(z,times,laramie)
 
+plt.scatter(l_list,b_list,color='black')
+plt.xlabel('Galactic Longitude l (deg)')
+plt.ylabel('Galactic Latitude b (deg)')
+plt.show()
 
     
     
