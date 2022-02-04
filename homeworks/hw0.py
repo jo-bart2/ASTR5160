@@ -44,6 +44,13 @@ def linear(x2,m2,b2):
 popt, pcov = curve_fit(linear,x,y,sigma=y_err)
 print('The recovered values are: m = '+str(popt[0])+', b = '+str(popt[1]))
 
+#JAB Problem 3: Plot data, original line, and best fit line
+plt.errorbar(x,y,y_err,color='black',label='Data',fmt='o')
+plt.plot(x,linear(x,2,1),color='purple',linestyle='dashed',label='Original Line',alpha=0.7)
+plt.plot(x,linear(x,popt[0],popt[1]),color='red',linestyle='dashed',label='Best Fit',alpha=0.7)
+plt.legend()
+
+#JAB Problem 4: 
 
 
 
