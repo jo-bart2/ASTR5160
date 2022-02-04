@@ -36,12 +36,9 @@ def match(Ra,Dec,x,y,z):
     
     if round(x2,10) == round(x,10) and round(y2,10) == round(y,10) and round(z2,10) == round(z,10):
         print('SkyCoord output matches given equations')
-        print(x,y,z)
-        print(x2,y2,z2 )
+
     else:
         print('SkyCoord output does not match given equations')
-        print(x,y,z)
-        print(x2,y2,z2 )
 
 #JAB run functions        
 match(r,d,coords.x,coords.y,coords.z)
@@ -53,4 +50,16 @@ b = 0
 center = SkyCoord(l*u.degree,b*u.degree,frame='galactic')
 equ = center.icrs
 print('The coordinates of the galactic center are: '+equ.to_string('hmsdms'))
-#These coordinates are in the constellation Sagittarius
+#These coordinates are in the constellation Sagittarius.
+#It is near the edge of the constellation
+
+#JAB Plot change in galactic coordinates over a year at zenith
+z = 40
+
+#JAB function to convert from equatorial to galactic
+def EquToGal(alpha,delta):
+    coord = SkyCoord(alpha,delta,frame='icrs')
+    gal = coord.galactic
+    
+    return gal
+
