@@ -36,33 +36,45 @@ def CreateArrays(m,b):
     return x, offset, y_err
 
 #JAB Problem 2: Fit a straight line and recover values of m2 and b2
-x, y, y_err = CreateArrays(2,1) #Given values of m=2, b=1
+#x, y, y_err = CreateArrays(2,1) #Given values of m=2, b=1
 
 def linear(x2,m2,b2):
     return m2*x2 + b2
 
-popt, pcov = curve_fit(linear,x,y,sigma=y_err)
-print('The recovered values are: m = '+str(popt[0])+', b = '+str(popt[1]))
+#popt, pcov = curve_fit(linear,x,y,sigma=y_err)
+#print('The recovered values are: m = '+str(popt[0])+', b = '+str(popt[1]))
 
 #JAB Problem 3: Plot data, original line, and best fit line
-plt.errorbar(x,y,y_err,color='black',label='Data',fmt='o')
-plt.plot(x,linear(x,2,1),color='purple',linestyle='dashed',label='Original Line',linewidth=0.5)
-plt.plot(x,linear(x,popt[0],popt[1]),color='green',linestyle='dashed',label='Best Fit',linewidth=0.5)
-plt.legend()
-plt.savefig('/d/users/jordan/Desktop/astro_tech_II/hw0.png') #JAB Problem 4
-plt.show()
+#plt.errorbar(x,y,y_err,color='black',label='Data',fmt='o')
+#plt.plot(x,linear(x,2,1),color='purple',linestyle='dashed',label='Original Line',linewidth=0.5)
+#plt.plot(x,linear(x,popt[0],popt[1]),color='green',linestyle='dashed',label='Best Fit',linewidth=0.5)
+#plt.legend()
+#plt.savefig('/d/users/jordan/Desktop/astro_tech_II/hw0.png') #JAB Problem 4
+#plt.show()
 
+#JAB Problem 5: Put it all together into one function 
 def AllTogether():
-    m = input('m = ')
-    b = input('b = ')
+    """
+    Parameters
+    -------
+    None.
+
+    Returns
+    -------
+    None.
+
+    """
     
-    x, y, y_err = CreateArrays(m,b)
+    m1 = float(input('m = '))
+    b1 = float(input('b = '))
+    
+    x, y, y_err = CreateArrays(m1,b1)
     
     popt, pcov = curve_fit(linear,x,y,sigma=y_err)
     print('The recovered values are: m = '+str(popt[0])+', b = '+str(popt[1]))
 
     plt.errorbar(x,y,y_err,color='black',label='Data',fmt='o')
-    plt.plot(x,linear(x,2,1),color='purple',linestyle='dashed',label='Original Line',linewidth=0.5)
+    plt.plot(x,linear(x,m1,b1),color='purple',linestyle='dashed',label='Original Line',linewidth=0.5)
     plt.plot(x,linear(x,popt[0],popt[1]),color='green',linestyle='dashed',label='Best Fit',linewidth=0.5)
     plt.legend()
     plt.savefig('/d/users/jordan/Desktop/astro_tech_II/hw0.png')
