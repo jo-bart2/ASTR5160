@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
-#JAB Problem 1
+#JAB Problem 1: Create function to return x,y, and y_err
 def linear(m,b):
     """
 
@@ -34,4 +34,10 @@ def linear(m,b):
     
     return x, offset, y_err
 
-linear(1,2)
+#JAB Problem 2: Fit a straight line and recover values of m2 and b2
+
+
+
+
+
+
