@@ -1,7 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from astropy.coordinates import SkyCoord
+from astropy.coordinates import SkyCoord, EarthLocation
 import astropy.units as u
+from astropy.time import Time
 
 #JAB RA and Dec of the star Procyon
 r = '07h39m18s' #RA
@@ -58,8 +59,57 @@ z = 40
 
 #JAB function to convert from equatorial to galactic
 def EquToGal(alpha,delta):
-    coord = SkyCoord(alpha,delta,frame='icrs')
+    coord = SkyCoord(alpha,delta,frame='icrs',unit='deg')
     gal = coord.galactic
     
     return gal
+
+#JAB Location of Laramie
+lati = 40
+long = 105+(59/60)+(11/3600)
+h = 2184
+laramie = EarthLocation(lat=lati,lon=long,height=h)
+
+#JAB function to find local sidereal time from location and time
+def FindRA(loc,time):
+    sid = []
+    for i in time:
+        t = Time(i, scale='utc', location=loc)
+        sid.append(t.sidereal_time('mean'))
+    return sid
+
+#JAB function to create list of dates and times for a year
+def makeTime():
+    date = Time(Time.now())
+    times = []
+    for i in range(366):
+        times.append(date+i*u.day)
+    return times
+
+#JAB put it all together to get lists of l and b for a year
+def allTogether(dec,sids,loc):
+    times = makeTime()
+    lst = FindRA(loc,times)
+    
+    ls = []
+    bs = []
+    
+    for x in lst:
+        gals = EquToGal(x,dec)
+        ls.append(gals.l)
+        bs.append(gals.b)
+    
+    return ls,bs
+
+times = makeTime()
+l_list,b_list = allTogether(z,times,laramie)
+
+
+    
+    
+    
+    
+
+
+
 
