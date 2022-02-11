@@ -76,3 +76,24 @@ ax2.legend()
 ax2.set_xlabel('RA (degrees)')
 ax2.set_ylabel('Dec (degrees)')
 plt.show()
+
+# JAB Set coordinates of spectroscopic plate of 1.8 deg radius at (2h20m5s, -0d6m12s)
+ra_plate, dec_plate = ['2h20m5s'], ['-0d6m12s']
+c_plate = SkyCoord(ra_plate, dec_plate, frame='icrs')
+
+# JAB Find which objects in data set fall within spectroscopic plate
+ii = c_plate.separation(c_tot) < 1.8*u.degree
+
+ra_in = ra_tot[ii == True]
+dec_in = dec_tot[ii == True]
+c_in = SkyCoord(ra_in, dec_in, frame='icrs')
+
+# JAB Overplot these points
+fig3 = plt.figure()
+ax3 = fig3.add_subplot(111)
+ax3.scatter(c_in.ra.degree, c_in.dec.degree, marker='o', color='purple', label='Data within Plate')
+ax3.scatter(c_tot.ra.degree, c_tot.dec.degree, marker='o', color='darkorange',alpha=0.5, label='All Data')
+ax3.legend()
+ax3.set_xlabel('RA (degrees)')
+ax3.set_ylabel('Dec (degrees)')
+plt.show()
