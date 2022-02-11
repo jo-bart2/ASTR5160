@@ -62,3 +62,17 @@ ax1.legend()
 ax1.set_xlabel('RA (degrees)')
 ax1.set_ylabel('Dec (degrees)')
 plt.show()
+
+# JAB Combine data sets into one array
+ra_tot = np.concatenate([ra3, ra4])
+dec_tot = np.concatenate([dec3, dec4])
+c_tot = SkyCoord(ra_tot, dec_tot, frame='icrs')
+
+# JAB Plot again using same symbol and color
+fig2 = plt.figure()
+ax2 = fig2.add_subplot(111)
+ax2.scatter(c_tot.ra.degree, c_tot.dec.degree, marker='o', color='darkorange',label='All Data')
+ax2.legend()
+ax2.set_xlabel('RA (degrees)')
+ax2.set_ylabel('Dec (degrees)')
+plt.show()
