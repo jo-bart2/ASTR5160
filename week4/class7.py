@@ -17,13 +17,19 @@ plt.show()
 
 # JAB Plot the same points in an Aitoff projection
 fig2 = plt.figure()
-ax2 = fig.add_subplot(111, projection='aitoff')
+ax2 = fig2.add_subplot(111, projection='aitoff')
 ax2.scatter(ra, dec, marker='o', color='goldenrod', s=0.7, alpha=0.5)
 xlab = ['14h','16h','18h','20h','22h','0h','2h','4h','6h','8h','10h']
 ax2.set_xticklabels(xlab, weight=800)
 ax2.grid(color='b', linestyle='dashed', linewidth=1.5)
 plt.show()
 
-
+# JAB Plot the same points in a Lambert projection
+fig3 = plt.figure()
+ax3 = fig3.add_subplot(111, projection='lambert')
+ax3.scatter(ra, dec, marker='o', color='forestgreen', s=0.7, alpha=0.5)
+ax3.set_xticklabels(xlab, weight=800)
+ax3.grid(color='b', linestyle='dashed', linewidth=1.5)
+plt.show()
 
 
