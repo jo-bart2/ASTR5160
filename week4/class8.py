@@ -29,6 +29,11 @@ if round(sep.degree,6) == round(angle,6):
     print('The dot product and separation angles match')
 else:
     print('The dot product and separation angles do not match')
-    
+
+# JAB populate the sky with 2 sets of 100 random points between ra = 2 and 3 and dec = -2 and 2
+ras1, decs1  = np.random.random(100)+2, (np.random.random(100)*4)-2
+ras2, decs2  = np.random.random(100)+2, (np.random.random(100)*4)-2
+
+# JAB plot the two sets of points in different colors with different symbols
 
 
