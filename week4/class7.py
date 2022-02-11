@@ -7,19 +7,23 @@ ra = 2*np.pi*(random(10000)-0.5)
 dec = np.arcsin(1.-random(10000)*2.)
 
 # JAB plot points on (x, y) grid
-plt.scatter(ra, dec, marker='o', color='purple', alpha=0.5)
-plt.xlabel('RA (radians)')
-plt.ylabel('Dec (radians)')
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
+ax1.scatter(ra, dec, marker='o', color='purple', alpha=0.5)
+ax1.set_xlabel('RA (radians)')
+ax1.set_ylabel('Dec (radians)')
 plt.show()
 # JAB In this projection, there are more points along the equator, near Dec = 0, than there are near the poles (dec = +/- pi/2)
 
 # JAB Plot the same points in an Aitoff projection
-fig = plt.figure()
-ax = fig.add_subplot(111, projection='aitoff')
-ax.scatter(ra, dec, marker='o', color='goldenrod', s=0.7, alpha=0.5)
+fig2 = plt.figure()
+ax2 = fig.add_subplot(111, projection='aitoff')
+ax2.scatter(ra, dec, marker='o', color='goldenrod', s=0.7, alpha=0.5)
 xlab = ['14h','16h','18h','20h','22h','0h','2h','4h','6h','8h','10h']
-ax.set_xticklabels(xlab, weight=800)
-ax.grid(color='b', linestyle='dashed', linewidth=1.5)
-fig.show()
+ax2.set_xticklabels(xlab, weight=800)
+ax2.grid(color='b', linestyle='dashed', linewidth=1.5)
+plt.show()
+
+
 
 
