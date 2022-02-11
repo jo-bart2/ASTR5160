@@ -48,7 +48,17 @@ plt.show()
 
 # JAB Find all points within 10' of each other
 id3, id4, d3, d4 = c4.search_around_sky(c3, (10./60)*u.degree)
-c3_match = SkyCoord(ra3[id3], dec3[id3], frame='icrs')
-c4_match = SkyCoord(ra4[id4], dec4[id4], frame='icrs')
+c3_10 = SkyCoord(ra3[id3], dec3[id3], frame='icrs')
+c4_10 = SkyCoord(ra4[id4], dec4[id4], frame='icrs')
 
-
+# JAB Overplot all points within 10' of each other a different color
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
+ax1.scatter(c3.ra.degree, c3.dec.degree, marker='o', color='olive', alpha=0.5, label='Set 1')
+ax1.scatter(c4.ra.degree, c4.dec.degree, marker='+', color='coral', alpha=0.5, label='Set 2')
+ax1.scatter(c3_10.ra.degree, c3_10.dec.degree, marker='o', color='purple', label='Set 1 within 10')
+ax1.scatter(c4_10.ra.degree, c4_10.dec.degree, marker='+', color='purple', label='Set 2 within 10')
+ax1.legend()
+ax1.set_xlabel('RA (degrees)')
+ax1.set_ylabel('Dec (degrees)')
+plt.show()
