@@ -24,5 +24,11 @@ angle = np.rad2deg(np.arccos(dot/(mag1*mag2)))
 print('The angle between the two objects is: ' + str(angle) + ' degrees')
 
 # JAB use SkyCoord separation to check result
+sep = c1.separation(c2)
+if round(sep.degree,6) == round(angle,6):
+    print('The dot product and separation angles match')
+else:
+    print('The dot product and separation angles do not match')
+    
 
 
