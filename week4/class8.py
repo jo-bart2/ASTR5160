@@ -35,5 +35,10 @@ ras1, decs1  = np.random.random(100)+2, (np.random.random(100)*4)-2
 ras2, decs2  = np.random.random(100)+2, (np.random.random(100)*4)-2
 
 # JAB plot the two sets of points in different colors with different symbols
-
-
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(ras1, decs1, marker='o', color='olive')
+ax.scatter(ras2, decs2, marker='+', color='coral')
+ax.set_xlabel('RA (degrees)')
+ax.set_ylabel('Dec (degrees)')
+plt.show()
