@@ -31,14 +31,15 @@ else:
     print('The dot product and separation angles do not match')
 
 # JAB populate the sky with 2 sets of 100 random points between ra = 2 and 3 and dec = -2 and 2
-ras1, decs1  = np.random.random(100)+2, (np.random.random(100)*4)-2
-ras2, decs2  = np.random.random(100)+2, (np.random.random(100)*4)-2
+c3 = SkyCoord((np.random.random(100)+2)*u.hour, ((np.random.random(100)*4)-2)*u.degree, frame='icrs')
+c4 = SkyCoord((np.random.random(100)+2)*u.hour, ((np.random.random(100)*4)-2)*u.degree, frame='icrs')
 
 # JAB plot the two sets of points in different colors with different symbols
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.scatter(ras1, decs1, marker='o', color='olive')
-ax.scatter(ras2, decs2, marker='+', color='coral')
+ax.scatter(c3.ra.degree, c3.dec.degree, marker='o', color='olive', alpha=0.8, label='Set 1')
+ax.scatter(c4.ra.degree, c4.dec.degree, marker='+', color='coral', label='Set 2')
+ax.legend()
 ax.set_xlabel('RA (degrees)')
 ax.set_ylabel('Dec (degrees)')
 plt.show()
