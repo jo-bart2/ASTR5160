@@ -31,8 +31,10 @@ else:
     print('The dot product and separation angles do not match')
 
 # JAB populate the sky with 2 sets of 100 random points between ra = 2 and 3 and dec = -2 and 2
-c3 = SkyCoord((np.random.random(100)+2)*u.hour, ((np.random.random(100)*4)-2)*u.degree, frame='icrs')
-c4 = SkyCoord((np.random.random(100)+2)*u.hour, ((np.random.random(100)*4)-2)*u.degree, frame='icrs')
+ra3, dec3 = (np.random.random(100)+2)*u.hour, ((np.random.random(100)*4)-2)*u.degree
+ra4, dec4 = (np.random.random(100)+2)*u.hour, ((np.random.random(100)*4)-2)*u.degree
+c3 = SkyCoord(ra3, dec3, frame='icrs')
+c4 = SkyCoord(ra4, dec4, frame='icrs')
 
 # JAB plot the two sets of points in different colors with different symbols
 fig = plt.figure()
@@ -43,3 +45,10 @@ ax.legend()
 ax.set_xlabel('RA (degrees)')
 ax.set_ylabel('Dec (degrees)')
 plt.show()
+
+# JAB Find all points within 10' of each other
+id3, id4, d3, d4 = c4.search_around_sky(c3, (10./60)*u.degree)
+c3_match = SkyCoord(ra3[id3], dec3[id3], frame='icrs')
+c4_match = SkyCoord(ra4[id4], dec4[id4], frame='icrs')
+
+
