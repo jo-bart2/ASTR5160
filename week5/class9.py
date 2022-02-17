@@ -22,4 +22,19 @@ hist = np.histogram(pix, bins=12)
 print('The number of points in each pixel is: ' +str(hist[0]))
 # JAB This output is consistent with pixels being equal area since there are approxiamtely equal numbers of points within each pixel
 
+# JAB Problem 4
+# JAB Determine points in pixel 2 and overplot
+ra2, dec2 = ra[pix == 2], dec[pix == 2]
+ra5, dec5 = ra[pix == 5], dec[pix == 5]
+ra8, dec8 = ra[pix == 8], dec[pix == 8]
 
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(ra, dec, marker='o', color='black', s=0.5, alpha=0.3)
+ax.scatter(ra2, dec2, marker='o', color='purple', s=0.5, label='Pixel 2')
+ax.scatter(ra5, dec5, marker='o', color='green', s=0.5, label='Pixel 5')
+ax.scatter(ra8, dec8, marker='o', color='orange', s=0.5, label='Pixel 8')
+ax.legend(loc='upper left')
+ax.set_xlabel('RA (degrees)')
+ax.set_ylabel('Dec (degrees)')
+plt.show()
