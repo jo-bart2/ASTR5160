@@ -38,3 +38,12 @@ ax.legend(loc='upper left')
 ax.set_xlabel('RA (degrees)')
 ax.set_ylabel('Dec (degrees)')
 plt.show()
+
+# JAB Problem 5
+# JAB Map points into pixels with nside=2
+pix2 = hp.ang2pix(2, ra, dec, lonlat=True)
+
+# JAB Determine nside=2 pixels that are inside pixel 5 at nside=1
+inside = pix2[pix == 5]
+vals = np.unique(inside)
+print('The new pixels that lie inside the original pixel 5 are: ' + str(vals))
