@@ -17,4 +17,19 @@ def ra_cap(ra):
     
     return cap
 
-print('The 4-array for the cap bounded by 5h in RA is: '+str(ra_cap('5h')))
+print('The 4-array for the cap bounded by 5h in RA is: ' + str(ra_cap('5h')))
+
+# JAB Problem 2
+# JAB Write function for spherical cap bounded by dec=36N
+def dec_cap(dec):
+    c = SkyCoord(0, 90, frame='icrs', unit='deg')
+    c.representation_type = 'cartesian'
+
+    cap = np.array([c.x.value, c.y.value, c.z.value, 1-np.sin(np.deg2rad(dec))])
+
+    return cap
+
+print('The 4-array for the cap bounded by 36N in dec is: ' + str(dec_cap(36)))
+
+# JAB Problem 3
+# JAB Write function for spherical cap for (5h, 36N) and theta=1
