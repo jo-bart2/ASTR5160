@@ -33,3 +33,12 @@ print('The 4-array for the cap bounded by 36N in dec is: ' + str(dec_cap(36)))
 
 # JAB Problem 3
 # JAB Write function for spherical cap for (5h, 36N) and theta=1
+def field(ra, dec, theta):
+    c = SkyCoord(ra, dec, frame='icrs')
+    c.representation_type = 'cartesian'
+
+    cap = np.array([c.x.value, c.y.value, c.z.value, 1-np.cos(np.deg2rad(theta))])
+
+    return cap
+
+print('The 4-array for the field bounded by (5h, 36N) is: ' + str(field('5h','36d',1)))
