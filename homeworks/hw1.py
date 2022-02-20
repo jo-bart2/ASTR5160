@@ -42,6 +42,26 @@ elif m=='2':
 times = ['2022-' + m + '-' + str(d) + ' 23:00:00' for d in days]
 dates = Time(times, format='iso') - utcoffset
 
+# JAB Find airmass for each of the quasars and create lists of each eventual column
+date = []
+coordinates = []
+RA = []
+Dec = []
+Airmass = []
+
+for x in dates:
+    altaz = [n.transform_to(AltAz(obstime=x, location=kitt)) for n in c]
+    airmass = [a.secz for a in altaz]
+    min_a = min(air for air in airmass if air > 0).value
+
+    date.append(x.value)
+    coordinates.append(data['col1'][airmass.index(min_a)])
+    RA.append(ras[airmass.index(min_a)])
+    Dec.append(decs[airmass.index(min_a)])
+    Airmass.append(min_a)
+
 # JAB 
+    
+
 
 
