@@ -1,9 +1,11 @@
 import numpy as np
 from astropy.coordinates import SkyCoord, EarthLocation, AltAz
 from astropy.time import Time
-from astropy.table import Table
+from astropy.table import Table, QTable
 import astropy.units as u
 import argparse
+
+# JAB Command line takes a single argument as a number representing the month
 
 # JAB Read in the data from the file and separate into ra and dec
 #data = Table.read('/d/scratch/ASTR5160/week4/HW1quasarfile.txt', format='ascii.no_header')
@@ -60,8 +62,10 @@ for x in dates:
     Dec.append(decs[airmass.index(min_a)])
     Airmass.append(min_a)
 
-# JAB 
-    
+# JAB Create and print out table of values
+table = QTable([date, coordinates, RA, Dec, Airmass], names=('Date (UTC)', 'Quasar Coordinates', 'RA (o)', 'Dec (o)', 'Airmass'))
+
+print(table)
 
 
 
