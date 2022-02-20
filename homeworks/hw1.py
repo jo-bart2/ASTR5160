@@ -8,8 +8,7 @@ import argparse
 # JAB Command line takes a single argument as a number representing the month
 
 # JAB Read in the data from the file and separate into ra and dec
-#data = Table.read('/d/scratch/ASTR5160/week4/HW1quasarfile.txt', format='ascii.no_header')
-data = Table.read('/Users/jobartlett/Documents/School/Spring 2022/Astro Techniques II/HW1quasarfile.txt', format='ascii.no_header')
+data = Table.read('/d/scratch/ASTR5160/week4/HW1quasarfile.txt', format='ascii.no_header')
 
 ras = []
 decs = []
