@@ -4,7 +4,7 @@ import pymangle
 from astropy.coordinates import SkyCoord
 import os
 
-# JAB Set up directory
+# JAB Set up directory pathway
 user = os.getenv("USER")
 formatter = "/d/www/jordan/public_html/week6"
 webdir = formatter.format(user)
@@ -12,6 +12,22 @@ webdir = formatter.format(user)
 # JAB Problem 1
 # JAB Use function from previous lecture
 def circle_cap(ra, dec, theta):
+    """
+    Parameters
+    ----------
+    ra: :class: 'integer'
+        The RA in degrees
+    dec: :class: 'integer'
+         The Dec in degrees
+    theta: :class: 'integer'
+           The radius of the cap in degrees
+
+    Returns
+    -------
+    cap: :class: '~numpy.ndarray'
+         The array containing the xyz and radius values for the cap
+    """
+
     c = SkyCoord(ra, dec, frame='icrs', unit='deg')
     c.representation_type = 'cartesian'
 
@@ -24,7 +40,43 @@ cap1 = circle_cap(76, 36, 5)
 cap2 = circle_cap(75, 35, 5)
 
 # JAB Problem 2
-# JAB Created .ply files manually in emacs
+# JAB Create function that writes .ply files from caps
+def write_ply_file(name, cap, cp, wt, px, st):
+    """
+    Parameters
+    ----------
+    name : :class: 'string'
+           The name of the file (without the .ply)
+    cap : :class: '~numpy.ndarray'
+          Array of arrays containing the xyz values and radius of each cap
+    cp : :class: '~numpy.ndarray'
+         Array of strings containing number of caps in each polygon
+    wt : :class: '~numpy.ndarray'
+         Array of strings of the weight of the polygons
+    px : :class: '~numpy.ndarray'
+         Array of string of the pixel number for the polygons
+    st : :class: '~numpy.ndarray'
+         Array of strings of the area of the polygons in steradians
+    """
+
+    # JAB Open file and write in lines
+    file = open(name+'.ply', 'w')
+
+    poly_num = len(cp) # JAB number of polygons
+    line1 = '{} polygons\n'.format(poly_num)
+    file.write(line1)
+
+    # JAB loop through the number of polygons and the corresponding caps
+    for i in range(poly_num):
+        file.write('polygon {} ( {} caps, {} weight, {} pixel, {} str):\n'.format(i+1, cp[i], wt[i], px[i], st[i]))
+        for j in cap[i]:
+            file.write('  {} {} {} {}\n'.format(j[0], j[1], j[2], j[3]))
+        
+    file.close()
+
+# JAB Write the files with the two caps
+write_ply_file('intersection.ply', [[cap1, cap2]], ['2'], ['1'], ['0'], ['0'])
+write_ply_file('bothcaps.ply', [[cap1], [cap2]], ['1','1'], ['1','1'], ['0','0'], ['0','0'])
 
 # JAB Problem 3
 # JAB Read in each of the masks
