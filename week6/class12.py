@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pymangle
 from astropy.coordinates import SkyCoord
+from numpy.random import random
 
 # JAB Problem 1
 # JAB Use ra_cap and dec_cap functions to make 4 caps with RA = 5h,6h and Dec = 30,40
@@ -91,4 +92,10 @@ caps2 = [cap10, cap12, cap60, cap70]
 
 write_ply('area2', [caps, caps2], ['4', '4'], ['0.9', '0.2'], ['0', '0'], [str(area), str(area2)])
 
+# JAB Problem 3
+# JAB Create random catalog of 1 million objects on the sphere
+ra = 360.*(random(1000000))
+dec = (180/np.pi)*np.arcsin(1.-random(1000000)*2.)
+
+# JAB Problem 4
 
