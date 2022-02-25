@@ -95,7 +95,7 @@ ax1.scatter(ra_both, dec_both, color='red', label='Both Mask', s=0.7)
 ax1.legend()
 ax1.set_xlabel('RA (degrees)')
 ax1.set_ylabel('Dec (degrees)')
-fig1.savefig(os.path.join(webdir, 'inter_both.png')
+fig1.savefig(os.path.join(webdir, 'inter_both.png'))
 plt.show()
 # JAB You can see one mask which includes both full caps and one that is only the intersection of the two
 
@@ -116,7 +116,7 @@ ax2.scatter(ra_flip, dec_flip, color='green', label='Cap 1 Flipped', s=0.7)
 ax2.legend()
 ax2.set_xlabel('RA (degrees)')
 ax2.set_ylabel('Dec (degrees)')
-fig2.savefig(os.path.join(webdir, 'inter_flip1.png')
+fig2.savefig(os.path.join(webdir, 'inter_flip1.png'))
 plt.show()
 
 
