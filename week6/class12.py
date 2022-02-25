@@ -98,4 +98,19 @@ ra = 360.*(random(1000000))
 dec = (180/np.pi)*np.arcsin(1.-random(1000000)*2.)
 
 # JAB Problem 4
+# JAB Determine which points lie within the polygons
+m = pymangle.Mangle('area2.ply')
 
+good = m.contains(ra, dec)
+
+ra_good, dec_good = ra[good], dec[good]
+
+# JAB Plot entire catalog with inside points overplotted
+fig = plt.figure()
+ax = fig.add_subplot(111)
+ax.scatter(ra, dec, color='orange', label='Entire Catalog', s=0.7)
+ax.scatter(ra_good, dec_good, color='black', label='Inside Mask', s=0.7)
+ax.legend(loc='lower left')
+ax.set_xlabel('RA (degrees)')
+ax.set_ylabel('Dec (degrees)')
+plt.show()
