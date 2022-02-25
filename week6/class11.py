@@ -139,7 +139,7 @@ ax3.set_xlabel('RA (degrees)')
 ax3.set_ylabel('Dec (degrees)')
 fig3.savefig(os.path.join(webdir, 'inter_flip2.png'))
 plt.show()
-# JAB When the cap constraint becomes negative, it only has the part not included in the other mask as opposed to having the areas of overlap
+# JAB When the cap constraint becomes negative, it plots everything outside of that cap so the area of overlap is left blank 
 
 # JAB If the previous plot had the bothcaps.ply instead of intersection.ply, it would have dots both in the intersection parts and also with the separate flipped masks
 
@@ -159,4 +159,4 @@ ax4.set_xlabel('RA (degrees)')
 ax4.set_ylabel('Dec (degrees)')
 fig4.savefig(os.path.join(webdir, 'inter_flip2.png'))
 plt.show()
-
+# JAB This mask makes sense because it is plotting everything not in cap1 or cap2
