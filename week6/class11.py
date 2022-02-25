@@ -75,8 +75,8 @@ def write_ply_file(name, cap, cp, wt, px, st):
     file.close()
 
 # JAB Write the files with the two caps
-write_ply_file('intersection.ply', [[cap1, cap2]], ['2'], ['1'], ['0'], ['0'])
-write_ply_file('bothcaps.ply', [[cap1], [cap2]], ['1','1'], ['1','1'], ['0','0'], ['0','0'])
+write_ply_file('intersection', [[cap1, cap2]], ['2'], ['1'], ['0'], ['0'])
+write_ply_file('bothcaps', [[cap1], [cap2]], ['1','1'], ['1','1'], ['0','0'], ['0','0'])
 
 # JAB Problem 3
 # JAB Read in each of the masks
@@ -95,10 +95,28 @@ ax1.scatter(ra_both, dec_both, color='red', label='Both Mask', s=0.7)
 ax1.legend()
 ax1.set_xlabel('RA (degrees)')
 ax1.set_ylabel('Dec (degrees)')
+fig1.savefig(os.path.join(webdir, 'inter_both.png')
 plt.show()
 # JAB You can see one mask which includes both full caps and one that is only the intersection of the two
 
 # JAB Problem 4
 # JAB Flip the sign of constraint on cap1 and read in
+cap1_flip = circle_cap(76, 36, 5)
+cap1_flip[3] = cap1_flip[3]*-1
+write_ply_file('intersection_flip', [[cap1_flip, cap2]], ['2'], ['1'], ['0'], ['0'])
+mflip1 = pymangle.Mangle('intersection_flip.ply')
+
+# JAB Plot minter and mflip1
+ra_flip, dec_flip = mflip1.genrand(10000)
+
+fig2 = plt.figure()
+ax2 = fig2.add_subplot(111)
+ax2.scatter(ra_inter, dec_inter, color='purple', label='Intersection Mask', s=0.7)
+ax2.scatter(ra_flip, dec_flip, color='green', label='Cap 1 Flipped', s=0.7)
+ax2.legend()
+ax2.set_xlabel('RA (degrees)')
+ax2.set_ylabel('Dec (degrees)')
+fig2.savefig(os.path.join(webdir, 'inter_flip1.png')
+plt.show()
 
 
