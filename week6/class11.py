@@ -41,7 +41,7 @@ cap2 = circle_cap(75, 35, 5)
 
 # JAB Problem 2
 # JAB Create function that writes .ply files from caps
-def write_ply_file(name, cap, cp, wt, px, st):
+def write_ply(name, cap, cp, wt, px, st):
     """
     Parameters
     ----------
@@ -75,8 +75,8 @@ def write_ply_file(name, cap, cp, wt, px, st):
     file.close()
 
 # JAB Write the files with the two caps
-write_ply_file('intersection', [[cap1, cap2]], ['2'], ['1'], ['0'], ['0'])
-write_ply_file('bothcaps', [[cap1], [cap2]], ['1','1'], ['1','1'], ['0','0'], ['0','0'])
+write_ply('intersection', [[cap1, cap2]], ['2'], ['1'], ['0'], ['0'])
+write_ply('bothcaps', [[cap1], [cap2]], ['1','1'], ['1','1'], ['0','0'], ['0','0'])
 
 # JAB Problem 3
 # JAB Read in each of the masks
@@ -90,7 +90,7 @@ ra_both, dec_both = mboth.genrand(10000)
 # JAB Plot points of each mask
 fig1 = plt.figure()
 ax1 = fig1.add_subplot(111)
-ax1.scatter(ra_inter, dec_inter, color='purple', label='Intersection Mask', s=0.7)
+ax1.scatter(ra_inter, dec_inter, color='purple', label='Intersection', s=0.7)
 ax1.scatter(ra_both, dec_both, color='red', label='Both Mask', s=0.7)
 ax1.legend()
 ax1.set_xlabel('RA (degrees)')
@@ -103,7 +103,7 @@ plt.show()
 # JAB Flip the sign of constraint on cap1 and read in
 cap1_flip = circle_cap(76, 36, 5)
 cap1_flip[3] = cap1_flip[3]*-1
-write_ply_file('intersection_flip', [[cap1_flip, cap2]], ['2'], ['1'], ['0'], ['0'])
+write_ply('intersection_flip', [[cap1_flip, cap2]], ['2'], ['1'], ['0'], ['0'])
 mflip1 = pymangle.Mangle('intersection_flip.ply')
 
 # JAB Plot minter and mflip1
@@ -111,7 +111,7 @@ ra_flip, dec_flip = mflip1.genrand(10000)
 
 fig2 = plt.figure()
 ax2 = fig2.add_subplot(111)
-ax2.scatter(ra_inter, dec_inter, color='purple', label='Intersection Mask', s=0.7)
+ax2.scatter(ra_inter, dec_inter, color='purple', label='Intersection', s=0.7)
 ax2.scatter(ra_flip, dec_flip, color='green', label='Cap 1 Flipped', s=0.7)
 ax2.legend()
 ax2.set_xlabel('RA (degrees)')
@@ -119,4 +119,23 @@ ax2.set_ylabel('Dec (degrees)')
 fig2.savefig(os.path.join(webdir, 'inter_flip1.png'))
 plt.show()
 
+# JAB Problem 5
+# JAB Flip sign of constraint on cap2 and read in
+cap2_flip = circle_cap(75, 35, 5)
+cap2_flip[3] = cap2_flip[3]*-1
+write_ply('intersection_flip2', [[cap1, cap2_flip]], ['2'], ['1'], ['0'], ['0'])
+mflip2 = pymangle.Mangle('intersection_flip2.ply')
 
+# JAB Plot minter, mflip1, and mflip2
+ra_flip2, dec_flip2 = mflip2.genrand(10000)
+
+fig3 = plt.figure()
+ax3 = fig3.add_subplot(111)
+ax3.scatter(ra_inter, dec_inter, color='purple', label='Intersection', s=0.7)
+ax3.scatter(ra_flip, dec_flip, color='green', label='Cap 1 Flipped', s=0.7)
+ax3.scatter(ra_flip2, dec_flip2, color='blue', label='Cap 2 Flipped', s=0.7)
+ax3.legend()
+ax3.set_xlabel('RA (degrees)')
+ax3.set_ylabel('Dec (degrees)')
+fig3.savefig(os.path.join(webdir, 'inter_flip2.png'))
+plt.show()
