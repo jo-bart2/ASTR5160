@@ -32,7 +32,10 @@ cap30 = dec_cap(30)
 cap40 = dec_cap(40)
 
 # JAB Calculate area of rectangle in steradians
+ra1, ra2 = np.deg2rad(15*5), np.deg2rad(15*6)
+dec1, dec2 = np.deg2rad(30), np.deg2rad(40)
 
+area = (ra2-ra1)*(np.sin(dec2)-np.sin(dec1))
 
 # JAB Write ply file with correct str and weight=0.9
 def write_ply(name, cap, cp, wt, px, st):
@@ -67,5 +70,25 @@ def write_ply(name, cap, cp, wt, px, st):
             file.write('  {} {} {} {}\n'.format(j[0], j[1], j[2], j[3]))
         
     file.close()
+
+caps = [cap5, cap6, cap30, cap40]
+
+write_ply('area', [caps], ['4'], ['0.9'], ['0'], [str(area)])
+
+# JAB Problem 2
+# JAB Add polygon bounded by RA = 10h,12h and Dec = 60,70 with weight = 0.2
+cap10 = ra_cap('10h')
+cap12 = ra_cap('12h')
+cap60 = dec_cap(60)
+cap70 = dec_cap(70)
+
+ra3, ra4 = np.deg2rad(15*10), np.deg2rad(15*12)
+dec3, dec4 = np.deg2rad(60), np.deg2rad(70)
+
+area2 = (ra4-ra3)*(np.sin(dec4)-np.sin(dec3))
+
+caps2 = [cap10, cap12, cap60, cap70]
+
+write_ply('area2', [caps, caps2], ['4', '4'], ['0.9', '0.2'], ['0', '0'], [str(area), str(area2)])
 
 
