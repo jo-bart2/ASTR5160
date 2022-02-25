@@ -103,16 +103,16 @@ plt.show()
 # JAB Flip the sign of constraint on cap1 and read in
 cap1_flip = circle_cap(76, 36, 5)
 cap1_flip[3] = cap1_flip[3]*-1
-write_ply('intersection_flip', [[cap1_flip, cap2]], ['2'], ['1'], ['0'], ['0'])
-mflip1 = pymangle.Mangle('intersection_flip.ply')
+write_ply('intersection_flip1', [[cap1_flip, cap2]], ['2'], ['1'], ['0'], ['0'])
+mflip1 = pymangle.Mangle('intersection_flip1.ply')
 
 # JAB Plot minter and mflip1
-ra_flip, dec_flip = mflip1.genrand(10000)
+ra_flip1, dec_flip1 = mflip1.genrand(10000)
 
 fig2 = plt.figure()
 ax2 = fig2.add_subplot(111)
 ax2.scatter(ra_inter, dec_inter, color='purple', label='Intersection', s=0.7)
-ax2.scatter(ra_flip, dec_flip, color='green', label='Cap 1 Flipped', s=0.7)
+ax2.scatter(ra_flip1, dec_flip1, color='green', label='Cap 1 Flipped', s=0.7)
 ax2.legend()
 ax2.set_xlabel('RA (degrees)')
 ax2.set_ylabel('Dec (degrees)')
@@ -132,10 +132,31 @@ ra_flip2, dec_flip2 = mflip2.genrand(10000)
 fig3 = plt.figure()
 ax3 = fig3.add_subplot(111)
 ax3.scatter(ra_inter, dec_inter, color='purple', label='Intersection', s=0.7)
-ax3.scatter(ra_flip, dec_flip, color='green', label='Cap 1 Flipped', s=0.7)
+ax3.scatter(ra_flip1, dec_flip1, color='green', label='Cap 1 Flipped', s=0.7)
 ax3.scatter(ra_flip2, dec_flip2, color='blue', label='Cap 2 Flipped', s=0.7)
 ax3.legend()
 ax3.set_xlabel('RA (degrees)')
 ax3.set_ylabel('Dec (degrees)')
 fig3.savefig(os.path.join(webdir, 'inter_flip2.png'))
 plt.show()
+# JAB When the cap constraint becomes negative, it only has the part not included in the other mask as opposed to having the areas of overlap
+
+# JAB If the previous plot had the bothcaps.ply instead of intersection.ply, it would have dots both in the intersection parts and also with the separate flipped masks
+
+# JAB Problem 6
+# JAB Flip constraint on both caps and read in
+write_ply('intersection_flip', [[cap1_flip, cap2_flip]], ['2'], ['1'], ['0'], ['0'])
+mflip = pymangle.Mangle('intersection_flip.ply')
+
+# JAB Plot just mflip
+ra_flip, dec_flip = mflip.genrand(1000000)
+
+fig4 = plt.figure()
+ax4 = fig4.add_subplot(111)
+ax4.scatter(ra_flip, dec_flip, color='blue', label='Both Flipped', s=0.7)
+ax4.legend(loc='upper right')
+ax4.set_xlabel('RA (degrees)')
+ax4.set_ylabel('Dec (degrees)')
+fig4.savefig(os.path.join(webdir, 'inter_flip2.png'))
+plt.show()
+
