@@ -29,8 +29,10 @@ def dec_cap(dec):
 
 cap5 = ra_cap('5h')
 cap6 = ra_cap('6h')
+cap6[3] = cap6[3]*-1
 cap30 = dec_cap(30)
 cap40 = dec_cap(40)
+cap40[3] = cap40[3]*-1
 
 # JAB Calculate area of rectangle in steradians
 ra1, ra2 = np.deg2rad(15*5), np.deg2rad(15*6)
@@ -80,8 +82,10 @@ write_ply('area', [caps], ['4'], ['0.9'], ['0'], [str(area)])
 # JAB Add polygon bounded by RA = 10h,12h and Dec = 60,70 with weight = 0.2
 cap10 = ra_cap('10h')
 cap12 = ra_cap('12h')
+cap12[3] = cap12[3]*-1
 cap60 = dec_cap(60)
 cap70 = dec_cap(70)
+cap70[3] = cap70[3]*-1
 
 ra3, ra4 = np.deg2rad(15*10), np.deg2rad(15*12)
 dec3, dec4 = np.deg2rad(60), np.deg2rad(70)
@@ -108,9 +112,11 @@ ra_good, dec_good = ra[good], dec[good]
 # JAB Plot entire catalog with inside points overplotted
 fig = plt.figure()
 ax = fig.add_subplot(111)
-ax.scatter(ra, dec, color='orange', label='Entire Catalog', s=0.7)
-ax.scatter(ra_good, dec_good, color='black', label='Inside Mask', s=0.7)
+ax.scatter(ra, dec, color='orange', label='Entire Catalog', s=0.5)
+ax.scatter(ra_good, dec_good, color='red', label='Inside Mask', s=0.5)
 ax.legend(loc='lower left')
 ax.set_xlabel('RA (degrees)')
 ax.set_ylabel('Dec (degrees)')
 plt.show()
+
+ra1, dec1 = m.genrand(10000)
