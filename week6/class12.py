@@ -119,4 +119,15 @@ ax.set_xlabel('RA (degrees)')
 ax.set_ylabel('Dec (degrees)')
 plt.show()
 
-ra1, dec1 = m.genrand(10000)
+# JAB Problem 5
+# JAB Generate 10,000 random points in the polygons
+ra_mask, dec_mask = m.genrand(10000)
+
+# JAB Plot points to see density
+fig1 = plt.figure()
+ax1 = fig1.add_subplot(111)
+ax1.scatter(ra_mask, dec_mask, color='orange', s=0.5)
+ax1.set_xlabel('RA (degrees)')
+ax1.set_ylabel('Dec (degrees)')
+plt.show()
+# JAB The density of points are not the same. The first polygon has a higher density of points. This is what we expect since it has a higher weight than the second polygon
