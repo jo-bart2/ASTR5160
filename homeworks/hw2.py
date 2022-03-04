@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+import argparse
 
 def field_area(r_min, r_max, d_min, d_max):
     '''
@@ -80,7 +81,13 @@ def populate():
     
 
 if __name__ == '__main__':
-    
+    # JAB Get input for directory to save figure to
+    parser = argparse.ArgumentParser(
+        'Make figures and save them to a particular directory')
+    parser.add_argument('directory', help='The directory to save plots to')
+    args = parser.parse_args()
+    plot_dir = args.directory
+
     # JAB Check function returns the correct value for (0,360,0.90)
     a = field_area(0,360,0,90)
     print('The area of a rectangle bounded by (0, 360, 0, 90) is: {}'.format(a))
