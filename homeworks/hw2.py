@@ -37,8 +37,19 @@ def populate():
     -------
     '''
 
+def plot_rect(coords):
+    '''
+    Parameters:
+    -----------
+    Returns:
+    --------
+    '''
+    
+    # JAB Determine the number of rectangles to plot
+    num = 
 
 if __name__ == '__main__':
-
+    
+    # JAB Check function returns the correct value for (0,360,0.90)
     a = field_area(0,360,0,90)
-    print(a)
+    print('The area of a rectangle bounded by (0, 360, 0, 90) is: {}'.format(a))
