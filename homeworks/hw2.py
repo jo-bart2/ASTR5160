@@ -39,9 +39,6 @@ def plot_rect(coords, plot_dir):
        The string representing the directory in which to save the plot
     '''
 
-    # JAB Determine the number of rectangles to plot
-    num = len(coords)
-
     # JAB Determine the area of each rectangle
     area = [field_area(i[0], i[1], i[2], i[3]) for i in coords]
     
@@ -85,7 +82,7 @@ def populate():
 if __name__ == '__main__':
     
     # JAB Check function returns the correct value for (0,360,0.90)
-    a = field_area(0,180,0,90)
+    a = field_area(0,360,0,90)
     print('The area of a rectangle bounded by (0, 360, 0, 90) is: {}'.format(a))
 
     # JAB Create list of rectangle coordinates and plot
