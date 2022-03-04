@@ -28,6 +28,43 @@ def field_area(r_min, r_max, d_min, d_max):
 
     return area
 
+def plot_rect(coords):
+    '''
+    Parameters:
+    -----------
+    coords: :class: '~numpy.ndarray'
+          An array of arrays containing ra and dec boundaries of each rectangle
+          in the form [ra_min. ra_max, dec_min, dec_max]
+
+    Returns:
+    --------
+    '''
+
+    # JAB Determine the number of rectangles to plot
+    num = len(coords)
+
+    # JAB Determine the area of each rectangle
+    area = [field_area(i[0], i[1], i[2], i[3]) for i in coords]
+    
+    # JAB Convert ra and dec to radians
+    c_rad = [[np.deg2rad(i[0]), np.deg2rad(i[1]), np.deg2rad(i[2]), np.deg2rad(i[3])] for i in coords]
+    
+    # JAB Determine lines to be plotted
+    l_r_min = [[np.linspace(i[0], i[0]), np.linspace(i[2], i[3])] for i in c_rad]
+    l_r_max = [[np.linspace(i[1], i[1]), np.linspace(i[2], i[3])] for i in c_rad]
+    l_d_min = [[np.linspace(i[0], i[1]), np.linspace(i[2], i[2])] for i in c_rad]
+    l_d_max = [[np.linspace(i[0], i[1]), np.linspace(i[3], i[3])] for i in c_rad]
+    # JAB Plot the rectangles on the sphere
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='aitoff')
+    for i in range(len(l_r_min)):
+        ax.plot(l_r_min[i][0], l_r_min[i][1], color='purple')
+        ax.plot(l_r_max[i][0], l_r_max[i][1], color='purple')
+        ax.plot(l_d_min[i][0], l_d_min[i][1], color='purple')
+        ax.plot(l_d_max[i][0], l_d_max[i][1], color='purple')
+    ax.grid(color='k', linestyle='solid', linewidth=0.6)
+    plt.show()
+
 
 def populate():
     '''
@@ -37,21 +74,6 @@ def populate():
     -------
     '''
 
-def plot_rect(coords):
-    '''
-    Parameters:
-    -----------
-    coords: :class: '~numpy.ndarray'
-          An array of arrays containing ra and dec boundaries of each rectangle
-
-    Returns:
-    --------
-    '''
-    
-    # JAB Determine the number of rectangles to plot
-    num = len(coords)
-
-    # JAB 
     
 
 if __name__ == '__main__':
@@ -59,3 +81,5 @@ if __name__ == '__main__':
     # JAB Check function returns the correct value for (0,360,0.90)
     a = field_area(0,180,0,90)
     print('The area of a rectangle bounded by (0, 360, 0, 90) is: {}'.format(a))
+
+    plot_rect([[0,45,0,45], [-90,-45,0,45]])
