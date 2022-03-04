@@ -36,6 +36,7 @@ def plot_rect(coords, plot_dir):
     coords: :class: '~numpy.ndarray'
           An array of arrays containing ra and dec boundaries of each rectangle
           in the form [ra_min. ra_max, dec_min, dec_max]
+
     dir: :class: 'string'
        The string representing the directory in which to save the plot
     '''
@@ -81,6 +82,7 @@ def populate():
     
 
 if __name__ == '__main__':
+    # JAB Part 1
     # JAB Get input for directory to save figure to
     parser = argparse.ArgumentParser(
         'Make figures and save them to a particular directory')
@@ -102,3 +104,6 @@ if __name__ == '__main__':
     c = [[ra_min[i], ra_max[i], dec_min[i], dec_max[i]] for i in range(len(ra_min))]
 
     plot_rect(c, plot_dir)
+
+    # JAB Part 2
+    
