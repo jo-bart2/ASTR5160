@@ -125,7 +125,7 @@ if __name__ == '__main__':
     ra_min = np.array([np.random.randint(-180,167)]*4)
     ra_max = ra_min+45
     dmin = np.random.randint(-90, -70)
-    dec_min = [dmin+i*np.random.randint(25,50) for i in range(4)]
+    dec_min = [dmin+i*45 for i in range(4)]
     dec_max = [i+20 for i in dec_min]
 
     c = [[ra_min[i], ra_max[i], dec_min[i], dec_max[i]] for i in range(len(ra_min))]
@@ -144,5 +144,10 @@ if __name__ == '__main__':
     
   
     # JAB Determine if these two values match
-    print(num_ex, len(ra))
+    if len(ra)-300 < round(num_ex,0) < len(ra)+300:
+        print('The lat-lon rectangle contains roughly the correct number of points:')
+        print('{} is close to {}'.format(round(num_ex,0), len(ra)))
+    else:
+        print('The lat-lon rectangle does not contain roughly the correct number of points')
+        
     
