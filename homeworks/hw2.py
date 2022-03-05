@@ -7,10 +7,10 @@ def field_area(r_min, r_max, d_min, d_max):
     Parameters
     ----------
     r_min: :class: 'integer' or 'float'
-         The minimum RA of the rectangle in degrees from -180 to 180
+         The minimum RA of the rectangle in degrees from 0 to 360
     
     r_max: :class: 'integer' or 'float'
-         The maximum RA of the rectangle in degrees from -180 to 180
+         The maximum RA of the rectangle in degrees from 0 to 360
     
     d_min: :class: 'integer' or 'float
          The minimum Dec of the rectangle in degrees from -90 to 90
@@ -35,7 +35,8 @@ def plot_rect(coords, plot_dir):
     -----------
     coords: :class: '~numpy.ndarray'
           An array of arrays containing ra and dec boundaries of each rectangle
-          in the form [ra_min. ra_max, dec_min, dec_max]
+          in the form [ra_min. ra_max, dec_min, dec_max] where ra is from -180 to 180
+          and dec is from -90 to 90
 
     dir: :class: 'string'
        The string representing the directory in which to save the plot
@@ -71,15 +72,40 @@ def plot_rect(coords, plot_dir):
     plt.show()
 
 
-def populate():
+def populate(r_min, r_max, d_min, d_max):
     '''
     Parameters
     ----------
+    r_min: :class: 'integer' or 'float'
+         The minimum RA of the rectangle in degrees from 0 to 360
+    
+    r_max: :class: 'integer' or 'float'
+         The maximum RA of the rectangle in degrees from 0 to 360
+    
+    d_min: :class: 'integer' or 'float
+         The minimum Dec of the rectangle in degrees from -90 to 90
+    
+    d_max: :class: 'integer' or 'float
+         The maximum Dec of the rectangle in degrees from -90 to 90
+
     Returns
     -------
-    '''
+    ra_in: :class: '~numpy.ndarray'
+         An array of RAs for the points on the sphere inside the rectangle
 
+    dec_in: :class: '~numpy.ndarray'
+          An array of Decs for the points on the sphere inside the rectangle
+    '''
     
+    # JAB Populate entire sphere randomly in area
+    ra = 360.*(np.random.random(100000))
+    dec = (180/np.pi)*np.arcsin(1.-np.random.random(100000)*2.)
+    
+    # JAB Determine ra and dec points within rectangle
+    ra_in = ra[np.logical_and(dec < d_max, dec > d_min)]
+    dec_in = dec[np.logical_and(ra < r_max, ra > r_min)]
+
+    return ra_in, dec_in
 
 if __name__ == '__main__':
     # JAB Part 1
@@ -91,8 +117,9 @@ if __name__ == '__main__':
     plot_dir = args.directory
 
     # JAB Check function returns the correct value for (0,360,0.90)
-    a = field_area(0,360,0,90)
-    print('The area of a rectangle bounded by (0, 360, 0, 90) is: {}'.format(a))
+    a = field_area(0, 360, 0, 90)
+    print('The area of a rectangle bounded by (0, 360, 0, 90) is: {} square degrees'
+          .format(a))
 
     # JAB Create list of rectangle coordinates and plot
     ra_min = np.array([np.random.randint(-180,167)]*4)
@@ -106,4 +133,11 @@ if __name__ == '__main__':
     plot_rect(c, plot_dir)
 
     # JAB Part 2
+    # JAB Confirm rectangle has correct number of points
+    ra, dec = populate(ra_min[2], ra_max[2], dec_min[2], dec_max[2])
+    
+    f = field_area(ra_min[2], ra_max[2], dec_min[2], dec_max[2])/field_area(0, 360, -90, 90)
+    num_ex = f*100000 # JAB the expected number of points for the fractional area
+    
+    print(num_ex, len(ra))
     
