@@ -68,7 +68,7 @@ def plot_rect(coords, plot_dir):
                         label='Area = {} sqr deg'.format(round(area[i],2)), alpha=0.5)
     ax.grid(color='k', linestyle='solid', linewidth=0.6)
     ax.legend()
-    plt.savefig('{}/plota.png'.format(plot_dir))
+    plt.savefig('{}/plot1.png'.format(plot_dir))
     plt.show()
 
 
@@ -102,8 +102,8 @@ def populate(r_min, r_max, d_min, d_max):
     dec = (180/np.pi)*np.arcsin(1.-np.random.random(100000)*2.)
     
     # JAB Determine ra and dec points within rectangle
-    ra_in = ra[np.logical_and(dec < d_max, dec > d_min)]
-    dec_in = dec[np.logical_and(ra < r_max, ra > r_min)]
+    ra_in = [ra[i] for i in range(len(ra)) if r_min < ra[i] < r_max and d_min < dec[i] < d_max]
+    dec_in = [dec[i] for i in range(len(ra)) if r_min < ra[i] < r_max and d_min < dec[i] < d_max]
 
     return ra_in, dec_in
 
@@ -116,7 +116,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     plot_dir = args.directory
 
-    # JAB Check function returns the correct value for (0,360,0.90)
+    # JAB Check function returns the correct value for (0, 360, 0, 90)
     a = field_area(0, 360, 0, 90)
     print('The area of a rectangle bounded by (0, 360, 0, 90) is: {} square degrees'
           .format(a))
@@ -133,11 +133,16 @@ if __name__ == '__main__':
     plot_rect(c, plot_dir)
 
     # JAB Part 2
-    # JAB Confirm rectangle has correct number of points
-    ra, dec = populate(ra_min[2], ra_max[2], dec_min[2], dec_max[2])
+    # JAB Randomly populate sphere
+    ra, dec = populate(ra_min[2]+180, ra_max[2]+180, dec_min[2], dec_max[2])
     
-    f = field_area(ra_min[2], ra_max[2], dec_min[2], dec_max[2])/field_area(0, 360, -90, 90)
-    num_ex = f*100000 # JAB the expected number of points for the fractional area
+    # JAB Determine the expected number of points in rectangle
+    area_rec = field_area(ra_min[2]+180, ra_max[2]+180, dec_min[2], dec_max[2])
+    area_full = field_area(0, 360, -90, 90)
+    f = area_rec/area_full
+    num_ex = f*100000 
     
+  
+    # JAB Determine if these two values match
     print(num_ex, len(ra))
     
