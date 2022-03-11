@@ -75,7 +75,7 @@ def sweep_files(ras, decs, filepath):
           & (decs >= decmin[i]) & (decs < decmax[i]) for i in range(len(ramin))]
 
     # JAB Determine which files are necessary from ras and decs
-    files = [filenames[i] for i in range(len(filenames)) if ii[i]]
+    files = [filenames[i] for i in range(len(filenames)) if len(ras[ii[i]]) > 0]
 
     return files
 
@@ -109,5 +109,5 @@ if __name__ == '__main__':
     # JAB Find files for first 100 data points
     path = '/d/scratch/ASTR5160/data/legacysurvey/dr9/north/sweep/9.0'
     filelist = sweep_files(ra100, dec100, path)
-    print(filelist)
+    for i in filelist: print(i)
     
