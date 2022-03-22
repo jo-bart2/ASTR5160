@@ -1,4 +1,5 @@
 import numpy as np
+from astropy.table import Table
 from tasks.week8.class16 import coords_from_sweep, sweep_files
 
 # JAB Problem 1
@@ -30,8 +31,16 @@ dec = np.array([9.7981])
 
 dir_path = '/d/scratch/ASTR5160/data/legacysurvey/dr9/south/sweep/9.0'
 filename = sweep_files(ra, dec, dir_path)[0]
+filepath = '{}/{}'.format(dir_path, filename)
 
-print(filename)
+table = Table.read(filepath)
+gflux = table['FLUX_G'][]
+
+#print(table['RA'])
+print(gflux)
+
+
+
 
 
 
