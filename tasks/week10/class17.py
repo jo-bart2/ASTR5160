@@ -1,4 +1,5 @@
 import numpy as np
+from tasks.week8.class16 import coords_from_sweep, sweep_files
 
 # JAB Problem 1
 # JAB Use UBVRI to ugriz transformations for g and z magnitudes
@@ -21,5 +22,16 @@ z_nav = 14.55
 
 print('The g magnitude is expected to be {} and is {} in SDSS'.format(g, g_nav))
 print('The z magnitude is expected to be {} and is {} in SDSS'.format(z, z_nav))
+
+# JAB Problem 2
+# JAB Get fluxes from Legacy Survey sweep files
+ra = np.array([248.8583])
+dec = np.array([9.7981])
+
+dir_path = '/d/scratch/ASTR5160/data/legacysurvey/dr9/south/sweep/9.0'
+filename = sweep_files(ra, dec, dir_path)[0]
+
+print(filename)
+
 
 
