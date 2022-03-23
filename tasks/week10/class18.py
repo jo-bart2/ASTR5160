@@ -48,6 +48,7 @@ mz = 22.5 - 2.5*np.log10(zflux_c)
 w1 = 22.5 - 2.5*np.log10(w1flux_c)
 w2 = 22.5 - 2.5*np.log10(w2flux_c)
 
+# JAB Problem 3
 
 
 
