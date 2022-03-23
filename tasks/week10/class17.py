@@ -40,14 +40,19 @@ c1 = SkyCoord(ra, dec, frame='icrs', unit='deg')
 c2 = SkyCoord(table['RA'], table['DEC'], frame='icrs', unit='deg')
 id1, id2, d2, d3 = c2.search_around_sky(c1, 1*u.arcsec)
 
-gflux = table['FLUX_G'][id2]
-rflux = table['FLUX_R'][id2]
-zflux = table['FLUX_Z'][id2]
+gflux = table['FLUX_G'][id2][0]
+rflux = table['FLUX_R'][id2][0]
+zflux = table['FLUX_Z'][id2][0]
 
+# JAB Convert fluxes to magnitudes
+mg = 22.5 - 2.5*np.log10(gflux)
+mr = 22.5 - 2.5*np.log10(rflux)
+mz = 22.5 - 2.5*np.log10(zflux)
 
+print('g = {} mag, r = {} mag, z = {} mag'.format(mg, mr, mz))
+# JAB These values agree fairly well with the SDSS values
 
-
-
+#
 
 
 
