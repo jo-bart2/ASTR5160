@@ -1,5 +1,7 @@
 import numpy as np
 from astropy.table import Table
+from astropy.coordinates import SkyCoord
+import astropy.units as u
 from tasks.week8.class16 import coords_from_sweep, sweep_files
 
 # JAB Problem 1
@@ -32,12 +34,17 @@ dec = np.array([9.7981])
 dir_path = '/d/scratch/ASTR5160/data/legacysurvey/dr9/south/sweep/9.0'
 filename = sweep_files(ra, dec, dir_path)[0]
 filepath = '{}/{}'.format(dir_path, filename)
-
 table = Table.read(filepath)
-gflux = table['FLUX_G'][]
 
-#print(table['RA'])
-print(gflux)
+c1 = SkyCoord(ra, dec, frame='icrs', unit='deg')
+c2 = SkyCoord(table['RA'], table['DEC'], frame='icrs', unit='deg')
+id1, id2, d2, d3 = c2.search_around_sky(c1, 1*u.arcsec)
+
+gflux = table['FLUX_G'][id2]
+rflux = table['FLUX_R'][id2]
+zflux = table['FLUX_Z'][id2]
+
+
 
 
 
