@@ -52,7 +52,16 @@ mz = 22.5 - 2.5*np.log10(zflux)
 print('g = {} mag, r = {} mag, z = {} mag'.format(mg, mr, mz))
 # JAB These values agree fairly well with the SDSS values
 
-#
+# JAB Find WISE magnitudes for the star
+w1flux = table['FLUX_W1'][id2][0]
+w2flux = table['FLUX_W2'][id2][0]
+w3flux = table['FLUX_W3'][id2][0]
+w4flux = table['FLUX_W4'][id2][0]
 
+w1 = 22.5 - 2.5*np.log10(w1flux)
+w2 = 22.5 - 2.5*np.log10(w2flux)
+w3 = 22.5 - 2.5*np.log10(w3flux)
+w4 = 22.5 - 2.5*np.log10(w4flux)
 
-
+print('W1 = {} mag, W2 = {} mag, W3 = {} mag, W4 = {} mag'.format(w1, w2, w3, w4))
+# JAB The star was not detected in the W4 band
