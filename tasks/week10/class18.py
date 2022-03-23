@@ -21,8 +21,6 @@ sweeppaths = ['{}/{}'.format(dirpath, i) for i in sweepnames]
 
 # JAB Determine indeces of each object for the sweep files
 sweeps = np.concatenate(np.array([Table.read(i) for i in sweeppaths]))
-#objs = np.array([Table.read(i) for i in sweeppaths])
-#sweeps = np.concatenate([objs[0], objs[1], objs[2], objs[3]])
 
 c1 = SkyCoord(radec[0], radec[1], frame='icrs', unit='deg')
 c2 = SkyCoord(sweeps['RA'], sweeps['DEC'], frame='icrs', unit='deg')
@@ -34,6 +32,23 @@ rflux = sweeps['FLUX_R'][id2]
 zflux = sweeps['FLUX_Z'][id2]
 w1flux = sweeps['FLUX_W1'][id2]
 w2flux = sweeps['FLUX_W2'][id2]
+
+# JAB Problem 2
+# JAB Correct fluxes for galactic dust
+gflux_c = gflux/sweeps['MW_TRANSMISSION_G'][id2]
+rflux_c = rflux/sweeps['MW_TRANSMISSION_R'][id2]
+zflux_c = zflux/sweeps['MW_TRANSMISSION_Z'][id2]
+w1flux_c = w1flux/sweeps['MW_TRANSMISSION_W1'][id2]
+w2flux_c = w2flux/sweeps['MW_TRANSMISSION_W2'][id2]
+
+# JAB Convert fluxes to magnitudes
+mg = 22.5 - 2.5*np.log10(gflux_c)
+mr = 22.5 - 2.5*np.log10(rflux_c)
+mz = 22.5 - 2.5*np.log10(zflux_c)
+w1 = 22.5 - 2.5*np.log10(w1flux_c)
+w2 = 22.5 - 2.5*np.log10(w2flux_c)
+
+
 
 
 
