@@ -62,4 +62,13 @@ def dec_cap(dec, negative=False):
 
     cap = np.array([c.x.value, c.y.value, c.z.value, h])
 
-    return 
+    return cap
+
+if __name__ == '__main__':
+    # JAB The ras and decs to create the caps for the rectangle
+    ramin = '10h15m'
+    ramax = '11h15m'
+    decmin = 30
+    decmax = 40
+
+    
