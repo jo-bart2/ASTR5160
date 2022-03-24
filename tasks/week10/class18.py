@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from astropy.table import Table
 from astropy.coordinates import SkyCoord
 import astropy.units as u
@@ -67,7 +68,17 @@ if __name__ == '__main__':
     w2 = flux_to_mag(w2flux_c)
 
     # JAB Problem 3
+    # JAB Calculate r-W1 and g-z
+    rw1 = mr - w1
+    gz = mg - mz
 
+    # JAB Plot r-W1 vs g-z
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(gz, rw1, s=0.9, color='forestgreen')
+    ax.set_xlabel('g - z (mag)')
+    ax.set_ylabel('r - W1 (mag)')
+    plt.savefig('testplot.png')
 
 
 
