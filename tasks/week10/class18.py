@@ -22,6 +22,10 @@ def flux_to_mag(fluxes):
     
     return mags
 
+# JAB Function to determine star or quasar based on cut
+def classify_objs():
+    
+
 if __name__ == '__main__':
     # JAB Problem 1
     # JAB Read in star and qso files and make one list of ra and dec
@@ -79,6 +83,8 @@ if __name__ == '__main__':
     ax.set_xlabel('g - z (mag)')
     ax.set_ylabel('r - W1 (mag)')
     plt.savefig('testplot.png')
+
+    # JAB Determine whether objects are stars or quasars
 
 
 
