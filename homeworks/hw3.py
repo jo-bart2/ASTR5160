@@ -66,7 +66,7 @@ def dec_cap(dec, negative=False):
     return cap
 
 # JAB Function to make a lat-lon rectangle of caps
-def rectangle(rmin, rmax, dmin, dmax):
+def rect_caps(rmin, rmax, dmin, dmax):
     '''
     Parameters
     ----------
@@ -97,6 +97,7 @@ def rectangle(rmin, rmax, dmin, dmax):
     return caps
 
 if __name__ == '__main__':
+    # JAB Problem 1
     # JAB The ras and decs to create the caps for the rectangle
     ramin = '10h15m'
     ramax = '11h15m'
@@ -106,9 +107,35 @@ if __name__ == '__main__':
     # JAB The coordinates of the plates
     plate_ra = np.array([155, 159, 163, 167])
     plate_dec = np.array([34, 36, 34, 36])
-    theta = 2
+    theta = np.array([2, 2, 2, 2])
 
     # JAB Make caps for the lat-lon rectangle
+    rect = rect_caps(ramin, ramax, decmin, decmax)
     
+    # JAB Make the caps for the circular plates
+    cc = circle_cap(plate_ra, plate_dec, theta)
+    plates = np.array([[cc[0][i], cc[1][i], cc[2][i], cc[3][i]] for i in range(len(cc))])
+    
+    # JAB Create .ply file for the intersection of the plates and rectangle
+    #caps = [[rect, i] for i in plates]
+    caps = np.array([np.concatenate((rect, np.array([i]))) for i in plates])
+    cp = np.array(['5', '5', '5', '5'])
+    wt = np.array(['1', '1', '1', '1'])
+    px = np.array(['0', '0', '0', '0'])
+    st = np.array(['0', '0', '0', '0'])
+    
+    write_ply('survey', caps, cp, wt, px, st)
 
+    # JAB Test plot of the masks
+    m = pymangle.Mangle("survey.ply")
+
+    # JAB Fill each mask with 10000 random points
+    ra, dec = m.genrand(10000)
     
+    # JAB Plot points of each mask
+    fig1 = plt.figure()
+    ax1 = fig1.add_subplot(111)
+    ax1.scatter(ra, dec, color='purple', s=0.7)
+    ax1.set_xlabel('RA (degrees)')
+    ax1.set_ylabel('Dec (degrees)')
+    plt.show()
