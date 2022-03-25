@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pymangle
 from astropy.coordinates import SkyCoord
+from tasks.week6.class11 import circle_cap, write_ply
 
 # JAB Function to create caps in RA (based on class12.py)
 def ra_cap(ra, negative=False):
@@ -64,11 +65,50 @@ def dec_cap(dec, negative=False):
 
     return cap
 
+# JAB Function to make a lat-lon rectangle of caps
+def rectangle(rmin, rmax, dmin, dmax):
+    '''
+    Parameters
+    ----------
+    rmin: :class: 'string'
+       A string representing the minimum RA in the format hms
+
+    rmax: :class: 'string'
+       A string representing the maximum RA in the format hms
+
+    dmin: :class: 'int' or 'float'
+       A value for the minimum Dec bound in degrees
+
+    dmax: :class: 'int' or 'float'
+       A value for the maximum Dec bound in degrees
+    
+    Returns
+    -------
+    caps: :class: '~numpy.ndarray'
+       An array of arrays containing the x,y,z, and h values for all four caps
+    '''
+    rcap_min = ra_cap(rmin)
+    rcap_max = ra_cap(rmax, negative=True)
+    dcap_min = dec_cap(dmin)
+    dcap_max = dec_cap(dmax, negative=True)
+
+    caps = np.array([rcap_min, rcap_max, dcap_min, dcap_max])
+
+    return caps
+
 if __name__ == '__main__':
     # JAB The ras and decs to create the caps for the rectangle
     ramin = '10h15m'
     ramax = '11h15m'
     decmin = 30
     decmax = 40
+
+    # JAB The coordinates of the plates
+    plate_ra = np.array([155, 159, 163, 167])
+    plate_dec = np.array([34, 36, 34, 36])
+    theta = 2
+
+    # JAB Make caps for the lat-lon rectangle
+    
 
     
