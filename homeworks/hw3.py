@@ -4,6 +4,7 @@ import pymangle
 from astropy.coordinates import SkyCoord
 from numpy.random import random
 from tasks.week6.class11 import circle_cap, write_ply
+from homeworks.hw2 import field_area
 
 # JAB Function to create caps in RA (based on class12.py)
 def ra_cap(ra, negative=False):
@@ -129,19 +130,27 @@ if __name__ == '__main__':
 
     # JAB Problem 2
     # JAB Create catalog of random points within the rectangle
-    m = pymangle.Mangle('survey.ply')
-    
-    num = 10000000
-    ra = 360.*(random(num))
-    dec = (180/np.pi)*np.arcsin(1.-random(num)*2.)
+    write_ply('rectangle', [rect], ['4'], ['1'], ['0'], ['0'])
+
+    mp = pymangle.Mangle('survey.ply')
+    mr = pymangle.Mangle('rectangle.ply')
+
+    num = 100000
+    ra, dec = mr.genrand(num)
 
     # JAB Find points within the mask
-    good = m.contains(ra, dec)
-    ra_in, dec_in = ra[good], dec[good]
+    area_ii = mp.contains(ra, dec)
+    ra_in, dec_in = ra[area_ii], dec[area_ii]
 
     # JAB Determine area of the mask
-    # JAB Divide number of points in mask by total number and multiply by total area of the sphere
-    area_tot = 41252.96
+    # JAB Convert RAs to degrees for use in area function
+    cmin = SkyCoord(ramin, '0d', frame='icrs')
+    cmax = SkyCoord(ramax, '0d', frame='icrs')
+    rmin_d, rmax_d = cmin.ra.degree, cmax.ra.degree
+
+    # JAB Divide number of points in mask by total number in the rectangle then
+    # multiply by the area of the rectangle
+    area_tot = field_area(rmin_d, rmax_d, decmin, decmax)
     area_mask = (len(ra_in)/num)*area_tot
     print(area_mask)
 
