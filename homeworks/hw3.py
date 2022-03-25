@@ -1,8 +1,9 @@
 import numpy as np
+from numpy.random import random
 import matplotlib.pyplot as plt
 import pymangle
 from astropy.coordinates import SkyCoord
-from numpy.random import random
+from astropy.table import Table
 from tasks.week6.class11 import circle_cap, write_ply
 from homeworks.hw2 import field_area
 
@@ -98,6 +99,35 @@ def rect_caps(rmin, rmax, dmin, dmax):
 
     return caps
 
+# JAB Function to read in .dat file and separate into ra and dec
+def radec_dat(filepath):
+    '''
+    Parameters
+    ----------
+    filepath: :class: 'string'
+       A string representing the full path to the .dat file
+
+    Returns
+    -------
+    ra_d: :class: '~numpy.ndarray'
+       An array of the RAs in degrees
+
+    dec_d: :class: '~numpy.ndarray'
+       An array of the Decs in degrees
+    '''
+    # JAB Read in .dat file
+    data = Table.read(filepath, format='ascii.no_header')
+
+    # JAB separate into ra and dec from string
+    ras = ['{}h{}m{}s'.format(i[0:2], i[2:4], i[4:9]) for i in data['col1']]
+    decs = ['{}d{}m{}s'.format(i[9:12], i[12:14], i[14:18]) for i in data['col1']]
+    
+    c = SkyCoord(ras, decs, frame='icrs')
+
+    ra_d, dec_d = np.array(c.ra.degree), np.array(c.dec.degree)
+
+    return ra_d, dec_d
+
 if __name__ == '__main__':
     # JAB Problem 1
     # JAB The ras and decs to create the caps for the rectangle
@@ -152,7 +182,11 @@ if __name__ == '__main__':
     # multiply by the area of the rectangle
     area_tot = field_area(rmin_d, rmax_d, decmin, decmax)
     area_mask = (len(ra_in)/num)*area_tot
-    print(area_mask)
+    
+    # JAB Problem 3
+    dir_path = '/d/scratch/ASTR5160/week8/HW3quasarfile.dat'
+    
+    
 
 
 
