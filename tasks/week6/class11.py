@@ -4,11 +4,6 @@ import pymangle
 from astropy.coordinates import SkyCoord
 import os
 
-# JAB Set up directory pathway
-user = os.getenv("USER")
-formatter = "/d/www/jordan/public_html/week6"
-webdir = formatter.format(user)
-
 # JAB Problem 1
 # JAB Use function from previous lecture
 def circle_cap(ra, dec, theta):
@@ -71,6 +66,11 @@ def write_ply(name, cap, cp, wt, px, st):
     file.close()
 
 if __name__ == '__main__':
+    # JAB Set up directory pathway
+    user = os.getenv("USER")
+    formatter = "/d/www/jordan/public_html/week6"
+    webdir = formatter.format(user)
+
     # JAB Make two caps: theta=5 (76, 36) and theta=5 (75, 35)
     cap1 = circle_cap(76, 36, 5)
     cap2 = circle_cap(75, 35, 5)
