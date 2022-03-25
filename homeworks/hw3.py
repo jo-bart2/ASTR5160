@@ -2,6 +2,7 @@ import numpy as np
 from numpy.random import random
 import matplotlib.pyplot as plt
 import pymangle
+import argparse
 from astropy.coordinates import SkyCoord
 from astropy.table import Table
 from tasks.week6.class11 import circle_cap, write_ply
@@ -129,6 +130,13 @@ def radec_dat(filepath):
     return ra_d, dec_d
 
 if __name__ == '__main__':
+    # JAB Get input for directory to save figure to
+    parser = argparse.ArgumentParser(
+        'Make figure and save it to a particular directory')
+    parser.add_argument('directory', help='The directory to save plot to')
+    args = parser.parse_args()
+    plot_dir = args.directory
+    
     # JAB Problem 1
     # JAB The ras and decs to create the caps for the rectangle
     ramin = '10h15m'
@@ -149,7 +157,6 @@ if __name__ == '__main__':
     plates = np.array([[cc[0][i], cc[1][i], cc[2][i], cc[3][i]] for i in range(len(cc))])
     
     # JAB Create .ply file for the intersection of the plates and rectangle
-    #caps = [[rect, i] for i in plates]
     caps = np.array([np.concatenate((rect, np.array([i]))) for i in plates])
     cp = np.array(['5', '5', '5', '5'])
     wt = np.array(['1', '1', '1', '1'])
@@ -205,5 +212,5 @@ if __name__ == '__main__':
     ax.text(155, 20, 'Quasar Number Density = {} per sqr deg'.format(round(den,4)))
     ax.set_xlabel('RA (degrees)')
     ax.set_ylabel('Dec (degrees)')
-    plt.show()
+    plt.savefig('{}/plot3.png'.format(plot_dir))
 
