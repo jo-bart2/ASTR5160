@@ -184,19 +184,26 @@ if __name__ == '__main__':
     area_mask = (len(ra_in)/num)*area_tot
     
     # JAB Problem 3
-    dir_path = '/d/scratch/ASTR5160/week8/HW3quasarfile.dat'
-    
-    
+    dat_path = '/d/scratch/ASTR5160/week8/HW3quasarfile.dat'
 
+    # JAB Get the RAs and Decs of the quasars
+    ra_q, dec_q = radec_dat(dat_path)
 
+    # JAB Find the quasars inside the survey mask
+    q_ii = mp.contains(ra_q, dec_q)
+    ra_qin, dec_qin = ra_q[q_ii], dec_q[q_ii]
 
+    # JAB Find the number density of quasars in the mask
+    den = len(ra_qin)/area_mask
 
-    '''
-    # JAB Plot points of each mask
-    fig1 = plt.figure()
-    ax1 = fig1.add_subplot(111)
-    ax1.scatter(ra, dec, color='purple', s=0.7)
-    ax1.set_xlabel('RA (degrees)')
-    ax1.set_ylabel('Dec (degrees)')
+    # JAB Plot quasars inside and outside the mask
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(ra_q, dec_q, color='purple', s=0.7, alpha=0.4)
+    ax.scatter(ra_qin, dec_qin, color='forestgreen', s=0.7)
+    ax.text(155, 23, 'Mask Area = {} sqr deg'.format(round(area_mask,4)))
+    ax.text(155, 20, 'Quasar Number Density = {} per sqr deg'.format(round(den,4)))
+    ax.set_xlabel('RA (degrees)')
+    ax.set_ylabel('Dec (degrees)')
     plt.show()
-    '''
+
