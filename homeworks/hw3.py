@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pymangle
 from astropy.coordinates import SkyCoord
+from numpy.random import random
 from tasks.week6.class11 import circle_cap, write_ply
 
 # JAB Function to create caps in RA (based on class12.py)
@@ -126,12 +127,28 @@ if __name__ == '__main__':
     
     write_ply('survey', caps, cp, wt, px, st)
 
-    # JAB Test plot of the masks
-    m = pymangle.Mangle("survey.ply")
-
-    # JAB Fill each mask with 10000 random points
-    ra, dec = m.genrand(10000)
+    # JAB Problem 2
+    # JAB Create catalog of random points within the rectangle
+    m = pymangle.Mangle('survey.ply')
     
+    num = 10000000
+    ra = 360.*(random(num))
+    dec = (180/np.pi)*np.arcsin(1.-random(num)*2.)
+
+    # JAB Find points within the mask
+    good = m.contains(ra, dec)
+    ra_in, dec_in = ra[good], dec[good]
+
+    # JAB Determine area of the mask
+    # JAB Divide number of points in mask by total number and multiply by total area of the sphere
+    area_tot = 41252.96
+    area_mask = (len(ra_in)/num)*area_tot
+    print(area_mask)
+
+
+
+
+    '''
     # JAB Plot points of each mask
     fig1 = plt.figure()
     ax1 = fig1.add_subplot(111)
@@ -139,3 +156,4 @@ if __name__ == '__main__':
     ax1.set_xlabel('RA (degrees)')
     ax1.set_ylabel('Dec (degrees)')
     plt.show()
+    '''
