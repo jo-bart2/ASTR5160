@@ -16,7 +16,6 @@ def circle_cap(ra, dec, theta):
          The Dec in degrees
     theta: :class: 'integer'
            The radius of the cap in degrees
-
     Returns
     -------
     cap: :class: '~numpy.ndarray'
