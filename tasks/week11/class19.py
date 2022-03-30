@@ -95,5 +95,13 @@ if __name__ == '__main__':
     # JAB Restrict to r < 20
     mr = flux_to_mag(psfobjs['FLUX_R']/psfobjs['MW_TRANSMISSION_R'])
     psfobjs20 = psfobjs[mr < 20]
-    print(len(psfobjs20))
+    
+    # JAB Coordinate match objects from qso file
+    qsofile = '/d/scratch/ASTR5160/week10/qsos-ra180-dec30-rad3.fits'
+    qobjs = Table.read(qsofile)
+
+    iiq = sweep_index(qobjs['RA'], qobjs['DEC'], psfobjs20, 0.5, u.arcsec)
+    qsos = psfobjs[iiq]
+    
+    
     
