@@ -20,7 +20,7 @@ def sweep_index(ra, dec, sweep_table, radius):
        An astropy Table read in from the sweep file(s)
 
     radius: :class: 'int', 'float'
-       The value of the radius around which to search for the RA and Dec
+       The value of the radius in arcsec around which to search
 
     Results
     -------
@@ -35,4 +35,22 @@ def sweep_index(ra, dec, sweep_table, radius):
 
     return id2
 
+if __name__ == '__main__':
+    # JAB Problem 1
+    # JAB Find the closest object in sweep files to (188.53667, 21.04572)
+    ra = np.array([188.53667])
+    dec = np.array([21.04572])
 
+    dirpath = '/d/scratch/ASTR5160/data/legacysurvey/dr9/south/sweep/9.0'
+    sweepname = sweep_files(ra, dec, dirpath)
+    sweeppath = '{}/{}'.format(dirpath, sweepname[0])
+
+    objs = Table.read(sweeppath)
+    ii = sweep_index(ra, dec, objs, 0.05)
+    
+    # JAB Determine the type of object it is
+    ob_type = objs['TYPE'][ii][0]
+    print('The type of object is: {}'.format(ob_type))
+    # JAB This is an extended object
+
+    # JAB Problem 2
