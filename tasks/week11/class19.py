@@ -103,5 +103,6 @@ if __name__ == '__main__':
     iiq = sweep_index(qobjs['RA'], qobjs['DEC'], psfobjs20, 0.5, u.arcsec)
     qsos = psfobjs[iiq]
     
+    # JAB Problem 4
     
     
