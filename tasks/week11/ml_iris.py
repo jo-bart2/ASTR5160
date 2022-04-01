@@ -50,3 +50,5 @@ for i in range(3):
     ax2.set_title('Iris Classifications - Mock Data')
     ax2.legend(loc = 'upper right')
 plt.show()
+
+# JAB Determine percentage of irises that are virginica

@@ -91,9 +91,10 @@ if __name__ == '__main__':
 
     # JAB Pull out only stellar objects
     psfobjs = objs3[objs3['TYPE'] == 'PSF']
+    print(len(psfobjs))
 
     # JAB Restrict to r < 20
-    mr = flux_to_mag(psfobjs['FLUX_R']/psfobjs['MW_TRANSMISSION_R'])
+    mr = flux_to_mag(psfobjs['FLUX_R'])
     psfobjs20 = psfobjs[mr < 20]
     
     # JAB Coordinate match objects from qso file
