@@ -52,3 +52,7 @@ for i in range(3):
 plt.show()
 
 # JAB Determine percentage of irises that are virginica
+vir = mock_target_class[mock_target_class == 2]
+per = (len(vir)/len(mock_target_class))*100
+
+print('The percentage of mock irises that are virginica is {}%'.format(per))
