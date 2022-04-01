@@ -91,7 +91,6 @@ if __name__ == '__main__':
 
     # JAB Pull out only stellar objects
     psfobjs = objs3[objs3['TYPE'] == 'PSF']
-    print(len(psfobjs))
 
     # JAB Restrict to r < 20
     mr = flux_to_mag(psfobjs['FLUX_R'])
