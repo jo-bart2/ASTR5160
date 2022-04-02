@@ -33,15 +33,8 @@ def ml_classify_objs(qso, star, testdata):
     s_mz, q_mz = flux_to_mag(np.array(star['FLUX_Z'])), flux_to_mag(np.array(qso['FLUX_Z']))
     s_w1, q_w1 = flux_to_mag(np.array(star['FLUX_W1'])), flux_to_mag(np.array(qso['FLUX_W1']))
     
-    # JAB Remove NaN values from arrays
     allmags = [s_mg, q_mg, s_mr, q_mr, s_mz, q_mz, s_w1, q_w1]
-    for i in range(len(allmags)):
-        for j in range(len(allmags[i])):
-            if np.isnan(allmags[i][j]):
-                for x in allmags:
-                    np.delete(x, j)
         
-
     s_gz, q_gz = allmags[0] - allmags[4], allmags[1] - allmags[5]
     s_rw, q_rw = allmags[2] - allmags[6], allmags[3] - allmags[7]
     
@@ -51,20 +44,18 @@ def ml_classify_objs(qso, star, testdata):
     t_w1 = flux_to_mag(np.array(testdata['FLUX_W1']))
 
     testmags = [t_mg, t_mr, t_mz, t_w1]
-    for i in range(len(testmags)):
-        for j in range(len(testmags[i])):
-            if np.isnan(testmags[i][j]):
-                for x in testmags:
-                    np.delete(x, j)
 
     t_gz = testmags[0] - testmags[2]
     t_rw = testmags[1] - testmags[3]
 
     # JAB Make data arrays for the color cuts
-    s_data = np.array([[s_gz[i], s_rw[i]] for i in range(len(s_gz))])
-    q_data = np.array([[q_gz[i], q_rw[i]] for i in range(len(q_gz))])
+    s_data = np.array([[s_gz[i], s_rw[i]] for i in range(len(s_gz)) if 
+                       np.isnan(s_gz[i]) == False and np.isnan(s_rw[i]) == False])
+    q_data = np.array([[q_gz[i], q_rw[i]] for i in range(len(q_gz)) if 
+                       np.isnan(q_gz[i]) == False and np.isnan(q_rw[i]) == False])
 
-    t_data = np.array([[t_gz[i], t_rw[i]] for i in range(len(t_gz))])
+    t_data = np.array([[t_gz[i], t_rw[i]] for i in range(len(t_gz)) if 
+                       np.isnan(t_gz[i]) == False and np.isnan(t_rw[i]) == False])
 
     # JAB Make "known" data arrays
     data = np.concatenate([s_data, q_data])
@@ -76,7 +67,7 @@ def ml_classify_objs(qso, star, testdata):
     knn = neighbors.KNeighborsClassifier(n_neighbors=1)
     knn.fit(data, data_class)
 
-    predicted_class = np.array(knn.predict([t_data]))
+    predicted_class = np.array(knn.predict(t_data))
     
     return predicted_class
 
@@ -125,6 +116,5 @@ if __name__ == '__main__':
     # JAB Use funtion to test a few objects
     test = psfobjs20[0:21]
     classes = ml_classify_objs(qsos, stars, test)
-    print(classes)
     
     
