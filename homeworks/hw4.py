@@ -90,6 +90,22 @@ def sdss_mags(ra, dec):
     
     return u, i, ii
 
+def mag_to_flux(mags):
+    '''
+    Parameters
+    ----------
+    mags: :class: '~numpy.ndarray'
+       An array of magnitudes to be converted
+    
+    Returns
+    -------
+    fluxes: :class: '~numpy.ndarray'
+       An array of fluxes from the magnitudes (in nanomaggies)
+    '''
+    fluxes = 10**((22.5 - mags)/2.5)
+    
+    return fluxes
+
 if __name__ == '__main__':
     # JAB Footprint in circular region of theta = 3 at (163, 50)
     theta = 3
@@ -144,6 +160,12 @@ if __name__ == '__main__':
     objs_sdss = objs[ii_not]
     
     # JAB Find brightest u-band source
-    ubrite1 = objs_sdss[umag == min(umag)]
+    ii_brite = umag == min(umag)
+    ubrite1 = objs_sdss[ii_brite]
     
+    # JAB Problem 7
+    # JAB Convert u and i magnitudes of ubrite1 to fluxes
+    uflux = mag_to_flux(umag[ii_brite])
+    iflux = mag_to_flux(imag[ii_brite])
+
     
