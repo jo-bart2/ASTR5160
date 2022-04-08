@@ -135,4 +135,6 @@ if __name__ == '__main__':
     # JAB Query SDSS and find u and i magnitudes
     umag, imag, ii_not = sdss_mags(objs['RA'], objs['DEC'])
     
-    
+    # JAB Problem 5
+    # JAB Print total number of sources with SDSS matches
+    print('The total number of SDSS sources are: {}'.format(len(umag)))
