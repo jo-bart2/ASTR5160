@@ -137,4 +137,13 @@ if __name__ == '__main__':
     
     # JAB Problem 5
     # JAB Print total number of sources with SDSS matches
-    print('The total number of SDSS sources are: {}'.format(len(umag)))
+    print('The total number of SDSS sources is: {}'.format(len(umag)))
+
+    # JAB Problem 6
+    # JAB Remove FIRST sources with no SDSS match
+    objs_sdss = objs[ii_not]
+    
+    # JAB Find brightest u-band source
+    ubrite1 = objs_sdss[umag == min(umag)]
+    
+    
