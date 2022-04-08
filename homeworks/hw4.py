@@ -2,7 +2,9 @@ import numpy as np
 from astropy.table import Table, vstack
 from astropy.coordinates import SkyCoord
 import astropy.units as u
+from time import sleep
 from tasks.week8.class16 import coords_from_sweep, sweep_files
+from tasks.week8 import sdssDR9query
 from tasks.week10.class18 import flux_to_mag
 from tasks.week11.class19 import sweep_index
 
@@ -25,10 +27,68 @@ def sweep_paths(directory, ras, decs):
        A list of strings representing the full paths to each sweep file
 
     '''
+    # JAB Find names of files and make string of full path
     names = sweep_files(ras, decs, directory)
     paths = ['{}/{}'.format(directory, i) for i in names]
     
     return paths
+
+def sdss_mags(ra, dec):
+    '''
+    Much of this code comes directly from Adam's sdssDR9query.py
+
+    Parameters
+    ----------
+    ra: :class: '~numpy.ndarray'
+       An array of the RAs of the objects to query
+
+    dec: :class: '~numpy.ndarray'
+       An array of the Decs of the objects to query
+    
+    Returns
+    -------
+    u: :class: '~numpy.ndarray'
+       An array of the returned u magnitudes from the query
+
+    i: :class: '~numpy.ndarray'
+       An array of the returned i magnitudes from the query
+    
+    ii: :class: 'boolean array'
+       A boolean array for determining index of objects without u and i mags
+    '''
+    # ADM initialize the query.
+    qry = sdssDR9query.sdssQuery()
+
+    ui = []
+    for radec in range(len(ra)):
+        # ADM the query to be executed. You can substitute any query, here!
+        # JAB Edited to only query for u and i magnitudes
+        query = """SELECT top 1 u,i FROM PhotoObj as PT
+        JOIN dbo.fGetNearbyObjEq(""" + str(ra[radec]) + """,""" + str(dec[radec]) + """,0.02) as GNOE
+        on PT.objID = GNOE.objID ORDER BY GNOE.distance"""
+
+        # ADM execute the query.
+        qry.query = query
+        for line in qry.executeQuery():
+            result = line.strip()
+
+        # ADM NEVER remove this line! It won't speed up your code, it will
+        # ADM merely overwhelm the SDSS server (a denial-of-service attack)!
+        sleep(1)
+
+        # ADM the server returns a byte-type string. Convert it to a string.
+        ui.append(result.decode())
+    
+    ui = np.array(ui)
+    ii = ui != 'No objects have been found'
+    ui_mags = ui[ii]
+    
+    # JAB Convert string to floats of ra and dec
+    ui_list = [x.split(',') for x in ui_mags]
+    u = np.array([float(x[0]) for x in ui_list])
+    i = np.array([float(x[1]) for x in ui_list])
+    
+    return u, i, ii
 
 if __name__ == '__main__':
     # JAB Footprint in circular region of theta = 3 at (163, 50)
@@ -70,3 +130,9 @@ if __name__ == '__main__':
     # JAB Problem 3
     # JAB Print out the total number of sources
     print('The total number of sources retrieved is: {}'.format(len(objs['RA'])))
+
+    # JAB Problem 4
+    # JAB Query SDSS and find u and i magnitudes
+    umag, imag, ii_not = sdss_mags(objs['RA'], objs['DEC'])
+    
+    
