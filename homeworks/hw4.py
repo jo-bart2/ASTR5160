@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from astropy.table import Table, vstack
 from astropy.coordinates import SkyCoord
 import astropy.units as u
@@ -167,5 +168,23 @@ if __name__ == '__main__':
     # JAB Convert u and i magnitudes of ubrite1 to fluxes
     uflux = mag_to_flux(umag[ii_brite])
     iflux = mag_to_flux(imag[ii_brite])
+    
+    # JAB Problem 8
+    # JAB Plot all of the fluxes as a function of wavelength
+    fluxes = [uflux, ubrite1['FLUX_G'], ubrite1['FLUX_R'], iflux, ubrite1['FLUX_Z']
+              , ubrite1['FLUX_W1'], ubrite1['FLUX_W2'], ubrite1['FLUX_W3'], 
+              ubrite1['FLUX_W4']]
+    print(fluxes)
+    waves = [0.3543, 0.4770, 0.6231, 0.7625, 0.9134, 3.4, 4.6, 12, 22]
 
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(waves, fluxes, color='forestgreen')
+    ax.plot(waves, fluxes, color='forestgreen', alpha=0.5)
+    ax.set_xlabel('Wavelength (microns)')
+    ax.set_ylabel('Flux (nanomaggies)')
+    plt.show()
+    
+    # JAB Problem 9
+    # JAB Examine ubrite1 in the SDSS Navigate Tool at (160.66714603364156, 48.56762346414696)
     
