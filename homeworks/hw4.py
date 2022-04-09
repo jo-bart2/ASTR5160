@@ -110,8 +110,6 @@ def mag_to_flux(mags):
 
 if __name__ == '__main__':
     # JAB Provide informative help message for module
-#    parser = argparse.ArgumentParser('This module cross-matches objects in a survey and queries\
- #the SDSS database for further information. It takes no additonal inputs.')
     parser = argparse.ArgumentParser('''This module completes the tasks put forth in Homework 4:
     1. Determines the FIRST sources that are in the survey.
     2. Cross-matches the sources to the Legacy Survey sweep files based on 3 factors.
