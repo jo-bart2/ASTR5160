@@ -4,6 +4,7 @@ from astropy.table import Table, vstack
 from astropy.coordinates import SkyCoord
 import astropy.units as u
 from time import sleep
+import argparse
 from tasks.week8.class16 import coords_from_sweep, sweep_files
 from tasks.week8 import sdssDR9query
 from tasks.week10.class18 import flux_to_mag
@@ -108,6 +109,9 @@ def mag_to_flux(mags):
     return fluxes
 
 if __name__ == '__main__':
+    # JAB Provide informative help message for module
+    parser = argparse.ArgumentParser('Some help for the module')
+
     # JAB Footprint in circular region of theta = 3 at (163, 50)
     theta = 3
     ra_center = np.array([163])
@@ -187,4 +191,15 @@ if __name__ == '__main__':
     
     # JAB Problem 9
     # JAB Examine ubrite1 in the SDSS Navigate Tool at (160.66714603364156, 48.56762346414696)
+
+    # JAB Problem 10
+    # JAB Comment on ubrite1 based on SDSS information
+    print('Comments on ubrite1 based on information from the SDSS navigate tool:')
+    print('The redshift of ubrite1 is 1.035. This is quite far for it to be a star\
+ and still be the brightest object in the survey.')
+    print('Instead, ubrite1 is classified on the Navigate Tool as a QSO.')
+    print('This allows ubrite1 to be at a higher redshift, but still remain the brightest\
+ object in the small survey.')
+    print('The significant emission lines in the SDSS spectra and the strong peak at 22\
+ micons in our data are further evidence of ubrite1 being a quasar.')
     
