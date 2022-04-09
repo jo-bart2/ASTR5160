@@ -174,7 +174,7 @@ if __name__ == '__main__':
     fluxes = [uflux, ubrite1['FLUX_G'], ubrite1['FLUX_R'], iflux, ubrite1['FLUX_Z']
               , ubrite1['FLUX_W1'], ubrite1['FLUX_W2'], ubrite1['FLUX_W3'], 
               ubrite1['FLUX_W4']]
-    print(fluxes)
+    
     waves = [0.3543, 0.4770, 0.6231, 0.7625, 0.9134, 3.4, 4.6, 12, 22]
 
     fig = plt.figure()
