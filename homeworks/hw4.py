@@ -110,7 +110,22 @@ def mag_to_flux(mags):
 
 if __name__ == '__main__':
     # JAB Provide informative help message for module
-    parser = argparse.ArgumentParser('Some help for the module')
+#    parser = argparse.ArgumentParser('This module cross-matches objects in a survey and queries\
+ #the SDSS database for further information. It takes no additonal inputs.')
+    parser = argparse.ArgumentParser('''This module completes the tasks put forth in Homework 4:
+    1. Determines the FIRST sources that are in the survey.
+    2. Cross-matches the sources to the Legacy Survey sweep files based on 3 factors.
+    3. Prints out the total number of sources.
+    4. Queries SDSS and fetches u and i band magnitudes for the sources.
+    5. Prints the number of sources with SDSS matches.
+    6. Determines the brightest source.
+    7. Converts the u and i magnitudes of the brighest source to fluxes.
+    8. Plots the 9 fluxes for the source.
+    9/10. Prints comments about source based on SDSS and survey information.
+
+    The module takes no additonal inputs.
+    ''')
+    parser.parse_args()
 
     # JAB Footprint in circular region of theta = 3 at (163, 50)
     theta = 3
@@ -194,12 +209,16 @@ if __name__ == '__main__':
 
     # JAB Problem 10
     # JAB Comment on ubrite1 based on SDSS information
-    print('Comments on ubrite1 based on information from the SDSS navigate tool:')
-    print('The redshift of ubrite1 is 1.035. This is quite far for it to be a star\
- and still be the brightest object in the survey.')
-    print('Instead, ubrite1 is classified on the Navigate Tool as a QSO.')
-    print('This allows ubrite1 to be at a higher redshift, but still remain the brightest\
- object in the small survey.')
-    print('The significant emission lines in the SDSS spectra and the strong peak at 22\
- micons in our data are further evidence of ubrite1 being a quasar.')
+    print('''Comments on ubrite1 based on information from the SDSS navigate tool:
+
+    - The redshift of ubrite1 is 1.035. This is quite far for it to be a star\
+ and still be the brightest object in the survey.
+
+    - Instead, ubrite1 is classified on the Navigate Tool as a QSO.
+
+    - This allows ubrite1 to be at a higher redshift, but still remain the brightest\
+ object in the small survey.
+
+    - The significant emission lines in the SDSS spectra and the strong peak at 22\
+ micons in our data are further evidence of ubrite1 being a quasar.''')
     
