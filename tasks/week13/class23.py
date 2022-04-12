@@ -60,6 +60,16 @@ plt.show()
 # JAB Determine the Chi squared for each m and b fit
 chi2 = np.array([sum((means - i)**2 / varis**2) for i in ymodel])
 
+# JAB Problem 4
+# JAB Plot m and b against chi squared
+labels = ['{},{}'.format(mguess[i], bguess[i]) for i in range(len(mguess))]
+fig2 = plt.figure()
+ax2 = fig2.add_subplot(111)
+ax2.bar(range(0,9), chi2, tick_label=labels)
+ax2.set_xlabel('m, b')
+ax2.set_ylabel('Chi Squared')
+plt.show()
+
 # JAB Print out best fit parameters
 chi2min = min(chi2)
 b_best = bguess[chi2 == chi2min]
@@ -68,6 +78,6 @@ m_best = mguess[chi2 == chi2min]
 print('The minimum Chi squared is: {}'.format(chi2min))
 print('The best fit parameters are: m = {} and b = {}'.format(m_best[0], b_best[0]))
 
-# JAB Problem 4
+
 
 
