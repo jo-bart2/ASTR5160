@@ -58,25 +58,41 @@ plt.show()
 
 # JAB Problem 3
 # JAB Determine the Chi squared for each m and b fit
-chi2 = np.array([sum((means - i)**2 / varis**2) for i in ymodel])
+chi = np.array([sum((means - i)**2 / varis**2) for i in ymodel])
 
 # JAB Problem 4
 # JAB Plot m and b against chi squared
 labels = ['{},{}'.format(mguess[i], bguess[i]) for i in range(len(mguess))]
 fig2 = plt.figure()
 ax2 = fig2.add_subplot(111)
-ax2.bar(range(0,9), chi2, tick_label=labels)
+ax2.bar(range(0,9), chi, tick_label=labels)
 ax2.set_xlabel('m, b')
 ax2.set_ylabel('Chi Squared')
 plt.show()
 
 # JAB Print out best fit parameters
-chi2min = min(chi2)
-b_best = bguess[chi2 == chi2min]
-m_best = mguess[chi2 == chi2min]
+chimin = min(chi)
+b_best = bguess[chi == chimin]
+m_best = mguess[chi == chimin]
 
-print('The minimum Chi squared is: {}'.format(chi2min))
+print('The minimum Chi squared is: {}'.format(chimin))
 print('The best fit parameters are: m = {} and b = {}'.format(m_best[0], b_best[0]))
+
+# JAB Problem 5
+# JAB Calculate delta chi squared for each model
+delta_chi = chi - chimin
+
+# JAB Determine the 68% and 95% confidence limits
+sig1 = 0.32
+sig2 = 0.05
+df = len(x) - 2 - 1
+
+probs = chi2.sf(delta_chi, df)
+cl68 = delta_chi[probs > sig1]
+cl95 = delta_chi[probs > sig2]
+
+print(len(cl68),len(cl95))
+
 
 
 
