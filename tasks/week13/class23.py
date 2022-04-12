@@ -41,17 +41,21 @@ mguess = np.array([2.5, 2.5, 2.5, 3, 3, 3, 3.5, 3.5, 3.5])
 bguess = np.array([4, 4.5, 5, 4, 4.5, 5, 4, 4.5, 5])
 colors = ['b', 'g', 'r', 'c', 'm', 'y', 'orange', 'purple', 'pink']
 
+ymodel = np.array([linear(mguess[i], x, bguess[i]) for i in range(len(mguess))])
+
 fig = plt.figure()
 ax = fig.add_subplot(111)
 ax.scatter(x, means, color='k', label='Data')
 
 for i in range(len(mguess)):
-    ax.plot(x, linear(mguess[i], x, bguess[i]), color=colors[i], label=
-            'y = {}x + {}'.format(mguess[i], bguess[i]), linestyle='dashed')
+    ax.plot(x, ymodel[i], color=colors[i], label='y = {}x + {}'.format(
+        mguess[i], bguess[i]), linestyle='dashed')
 
 ax.set_xlabel('X')
 ax.set_ylabel('Y')
 ax.legend()
 plt.show()
 
+# JAB Problem 3
+# JAB Determine the Chi squared for each m and b fit
 
