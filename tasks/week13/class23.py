@@ -38,7 +38,7 @@ if __name__ == '__main__':
     # JAB Problem 2
     # JAB Plot data and model lines
     mguess = np.array([2.5, 2.5, 2.5, 3, 3, 3, 3.5, 3.5, 3.5]) 
-    bguess = np.array([4, 4.5, 5, 4, 4.5, 5, 4, 4.5, 5])
+    bguess = np.array([4.5, 5, 5.5, 4.5, 5, 5.5, 4.5, 5, 5.5])
     colors = ['b', 'g', 'r', 'c', 'm', 'y', 'orange', 'purple', 'pink']
     
     ymodel = np.array([linear(mguess[i], x, bguess[i]) for i in range(len(mguess))])
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     # JAB Problem 3
     # JAB Determine the Chi squared for each m and b fit
-    chi = np.array([sum((means - i)**2 / varis**2) for i in ymodel])
+    chi = np.array([sum((means - i)**2 / varis) for i in ymodel])
 
     # JAB Problem 4
     # JAB Plot m and b against chi squared
@@ -68,6 +68,18 @@ if __name__ == '__main__':
     ax2.bar(range(0,9), chi, tick_label=labels)
     ax2.set_xlabel('m, b')
     ax2.set_ylabel('Chi Squared')
+    plt.show()
+
+    # JAB Plot m with constant b of 5 and b with constant m of 3
+    fig3 = plt.figure()
+    axm = fig3.add_subplot(211)
+    axb = fig3.add_subplot(212)
+    axm.scatter(mguess[bguess == 5], chi[bguess == 5], color='g')
+    axb.scatter(bguess[mguess == 3], chi[mguess == 3], color='purple')
+    axm.plot(mguess[bguess == 5], chi[bguess == 5], color='g', linestyle='dashed')
+    axb.plot(bguess[mguess == 3], chi[mguess == 3], color='purple', linestyle='dashed')
+    axm.set_xlabel('m'), axb.set_xlabel('b')
+    axm.set_ylabel('Chi Squared'), axb.set_ylabel('Chi Squared')
     plt.show()
 
     # JAB Print out best fit parameters
@@ -83,15 +95,10 @@ if __name__ == '__main__':
     delta_chi = chi - chimin
 
     # JAB Determine the 68% and 95% confidence limits
-    sig1 = 0.32
-    sig2 = 0.05
-    df = len(x) - 2 - 1
-
-    probs = chi2.sf(delta_chi, df)
-    cl68 = delta_chi[probs > sig1]
-    cl95 = delta_chi[probs > sig2]
-
-    print(len(cl68),len(cl95))
+    # JAB Calculate the chi squared value for each confidence for alpha
+    # equal to 2.3 for 68% and 6 for 95%
+    delta_chi68 = 2.3
+    delta_chi95 = 6
 
 
 
