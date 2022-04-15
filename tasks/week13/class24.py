@@ -18,6 +18,25 @@ if __name__ == '__main__':
     good = [round(c[i][i],6) == round(v[i],6) for i in range(len(v))]
     if good:
         print('The diagonals of the covariance matrix are equal to the variances')
+    else:
+        print('The diagonals of the covariance matrix are not the variances')
     
     # JAB Problem 2
+    # JAB Calculate the correlation matrix
+    s = np.array([np.std(i, ddof=1) for i in data])
+    cor = np.array([[c[i][j]/(s[i]*s[j]) for i in range(len(c))] for j in range(len(c))])
+
+    # JAB Find the most correlated and anti correlated columns
+    mins = np.array([min(i) for i in cor])
+    maxs = np.array([max(i[i < 0.99]) for i in cor])
+    
+    all_max = max(maxs)
+    all_min = min(mins)
+    
+    max_cols = [i+1 for i in range(len(cor)) if all_max in cor[i]]
+    min_cols = [i+1 for i in range(len(cor)) if all_min in cor[i]]
+    
+    print('The most correlated columns are {} and {}'.format(max_cols[0], max_cols[1]))
+    print('The most anti-correlated columns are {} and {}'.format(min_cols[0], min_cols[1]))
+    
     
