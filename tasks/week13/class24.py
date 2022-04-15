@@ -36,7 +36,11 @@ if __name__ == '__main__':
     max_cols = [i+1 for i in range(len(cor)) if all_max in cor[i]]
     min_cols = [i+1 for i in range(len(cor)) if all_min in cor[i]]
     
-    print('The most correlated columns are {} and {}'.format(max_cols[0], max_cols[1]))
-    print('The most anti-correlated columns are {} and {}'.format(min_cols[0], min_cols[1]))
+    print('The most correlated columns are {} and {} with correlation 
+    value of {}'.format(max_cols[0], max_cols[1], all_max))
+    print('The most anti-correlated columns are {} and {} with correlation 
+    value of {}'.format(min_cols[0], min_cols[1], all_min))
+    
+    # JAB Problem 3
     
     
