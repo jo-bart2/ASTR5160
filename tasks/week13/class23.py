@@ -95,10 +95,17 @@ if __name__ == '__main__':
     delta_chi = chi - chimin
 
     # JAB Determine the 68% and 95% confidence limits
-    # JAB Calculate the chi squared value for each confidence for alpha
-    # equal to 2.3 for 68% and 6 for 95%
-    delta_chi68 = 2.3
-    delta_chi95 = 6
+    cl68 = chi2.sf(delta_chi, 2) > 0.32
+    cl95 = chi2.sf(delta_chi, 2) > 0.05
+
+    chi68 = chi[cl68]
+    chi95 = chi[cl95]
+    
+    # JAB Plot the data with error bars and 68% and 95% confindence limits
+    y_best = ymodel[chi == chimin]
+    stds = np.array([np.std(data['col{}'.format(i)], ddof=1) for i in range(1,11)])
+    
+    
 
 
 
