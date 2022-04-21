@@ -46,10 +46,23 @@ def posterior(m, x, b, ys, var, m_min, m_max, b_min, b_max):
     # JAB Find the posterior probability
     prob = (-0.5)*sum(((ys - ymodel)**2)/var + np.log(2*np.pi*var))
 
+    # JAB Check the m and b prior conditions
     if b < b_min or b > b_max or m < m_min or m > m_max:
         prob = -np.inf
 
     return prob
+
+def mcmc_walk():
+    '''
+    Parameters
+    ----------
+    Returns
+    -------
+    '''
+    # JAB Step through m and b 
+    for i in range(num):
+        
+    
 
 if __name__ == '__main__':
     # JAB Problem 1
@@ -61,6 +74,5 @@ if __name__ == '__main__':
     mean = np.array([np.mean(data['col{}'.format(i)]) for i in range(1,11)])
     var = np.array([np.var(data['col{}'.format(i)], ddof=1) for i in range(1,11)])
 
-    # JAB Problem 2
-    print(posterior(3, x, 5, mean, var, 0, 5))
-    print(np.exp(posterior(3, x, 5, mean, var, 0, 5)))
+    # JAB Problem 3
+    
