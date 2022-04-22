@@ -52,16 +52,83 @@ def posterior(m, x, b, ys, var, m_min, m_max, b_min, b_max):
 
     return prob
 
-def mcmc_walk():
+def mcmc_walk(m_start, x, b_start, ys, var, m_min, m_max, b_min, b_max, num):
     '''
     Parameters
     ----------
+    m_start: :class: 'int', 'float'
+       The starting value of the slope
+
+    x: :class: '~numpy.ndarray'
+       An array of x values for the data
+
+    b_start: :class: 'int', 'float'
+       The starting value of the y intercept
+
+    ys: :class: '~numpy.ndarray'
+       An array of the y data points 
+
+    var: :class: '~numpy.ndarray'
+       The variances of the data
+
+    m_min: :class: 'int', 'float'
+       The minimum value for the Prior of the slope
+
+    m_max: :class: 'int', 'float'
+       The maximum value for the Prior of the slope
+
+    b_min: :class: 'int', 'float'
+       The minimum value for the Prior of the intercept
+
+    b_max: :class: 'int', 'float'
+       The maximum value for the Prior of the intercept
+
+    num: :class: 'int'
+       The number of steps to take in the MCMC
+    
     Returns
     -------
+    ms: :class: '~numpy.ndarray'
+       An array of the accepted slope values
+
+    bs: :class: '~numpy.ndarray'
+       An array of the accepted y-intercept values
+
+    posts: :class: '~numpy.ndarray'
+       An array of the posterior probabilities of the accepted m and b values
+
     '''
     # JAB Step through m and b 
-    for i in range(num):
+    ms = np.array([m_start])
+    bs = np.array([b_start])
+    posts = np.array([posterior(m_start, x, b_start, ys, var, m_min, m_max, b_min, b_max)])
+    i = 1
+
+    for steps in range(1,num):
+        # JAB Find new and old m and b
+        m_old = ms[i-1]
+        m_new = m_old + np.random.normal(0, 0.1)
+
+        b_old = bs[i-1]
+        b_new = b_old + np.random.normal(0, 0.1)
+
+        # JAB Calculate posterior probabilities
+        p_old = posts[i-1]
+        p_new = posterior(m_new, x, b_new, ys, var, m_min, m_max, b_min, b_max)
         
+        # JAB Find R value
+        R = p_new/p_old
+        
+        # JAB Accept or reject parameters
+        rand = np.random.random(1)
+        if R > 1 or rand < R < 1:
+            ms = np.append(ms, m_new)
+            bs = np.append(bs, b_new)
+            posts = np.append(posts, p_new)
+            
+            i += 1
+    
+    return ms, bs, posts
     
 
 if __name__ == '__main__':
@@ -75,4 +142,7 @@ if __name__ == '__main__':
     var = np.array([np.var(data['col{}'.format(i)], ddof=1) for i in range(1,11)])
 
     # JAB Problem 3
-    
+    steps = 100
+    m_acc, b_acc, post_acc = mcmc_walk(3, x, 5, mean, var, 2, 4, 4, 6, steps)
+    print(len(m_acc)/steps)
+    print(m_acc[post_acc == max(post_acc)], b_acc[post_acc == max(post_acc)])
