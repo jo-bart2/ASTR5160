@@ -52,7 +52,7 @@ def posterior(m, x, b, ys, var, m_min, m_max, b_min, b_max):
 
     return prob
 
-def mcmc_walk(m_start, x, b_start, ys, var, m_min, m_max, b_min, b_max, num):
+def mcmc_walk(m_start, x, b_start, ys, var, m_min, m_max, b_min, b_max, num, step):
     '''
     Parameters
     ----------
@@ -85,6 +85,9 @@ def mcmc_walk(m_start, x, b_start, ys, var, m_min, m_max, b_min, b_max, num):
 
     num: :class: 'int'
        The number of steps to take in the MCMC
+
+    step: :class: 'int', 'float'
+       The value of the step size for the walk
     
     Returns
     -------
@@ -107,10 +110,10 @@ def mcmc_walk(m_start, x, b_start, ys, var, m_min, m_max, b_min, b_max, num):
     for steps in range(1,num):
         # JAB Find new and old m and b
         m_old = ms[i-1]
-        m_new = m_old + np.random.normal(0, 0.1)
+        m_new = m_old + np.random.normal(0, step)
 
         b_old = bs[i-1]
-        b_new = b_old + np.random.normal(0, 0.1)
+        b_new = b_old + np.random.normal(0, step)
 
         # JAB Calculate posterior probabilities
         p_old = posts[i-1]
@@ -142,7 +145,12 @@ if __name__ == '__main__':
     var = np.array([np.var(data['col{}'.format(i)], ddof=1) for i in range(1,11)])
 
     # JAB Problem 3
-    steps = 100
-    m_acc, b_acc, post_acc = mcmc_walk(3, x, 5, mean, var, 2, 4, 4, 6, steps)
-    print(len(m_acc)/steps)
-    print(m_acc[post_acc == max(post_acc)], b_acc[post_acc == max(post_acc)])
+    steps = 1000
+    m_acc, b_acc, post_acc = mcmc_walk(3, x, 5, mean, var, 2, 4, 4, 6, steps, 0.05)
+    print('Best fit: m = {}, b = {}'.format(m_acc[post_acc == max(post_acc)][0], 
+                                            b_acc[post_acc == max(post_acc)][0]))
+
+    # JAB Problem 4
+    print('The acceptance rate is {}%'.format(len(m_acc)/steps*100))
+    # JAB The accpetance rate varies quite a bit, but by changing the step size 
+    # to 0.05 from 0.1, it is generally near 30%
