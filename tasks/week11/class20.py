@@ -65,6 +65,7 @@ def ml_classify_objs(qso, star, testdata):
 
     # JAB Use k-NN to determine if objects are stars or qsos
     knn = neighbors.KNeighborsClassifier(n_neighbors=1)
+    print(knn)
     knn.fit(data, data_class)
 
     predicted_class = np.array(knn.predict(t_data))
