@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from astropy.table import Table, vstack
 from astropy.coordinates import SkyCoord
 import astropy.units as u
@@ -6,6 +7,7 @@ from sklearn import neighbors
 from tasks.week8.class16 import coords_from_sweep, sweep_files
 from tasks.week10.class18 import flux_to_mag
 from tasks.week11.class19 import sweep_index
+from tasks.week13.class23 import linear
 from homeworks.hw4 import sweep_paths
 
 # JAB Functions to 'train' the identifier
@@ -71,9 +73,35 @@ def qso_color_cuts(qso, star, testdata):
 
     predicted_class = np.array(knn.predict(t_data))
     
-    return predicted_class
+    return predicted_class, s_data, q_data, t_data
 
-def plot_classified():
+def plot_classified(predicted_class, s_data, q_data, t_data, m, b):
+    t_stars = t_data[predicted_class == 0]
+    t_qsos = t_data[predicted_class == 1]
+
+    starsx = np.array([s_data[i][0] for i in range(len(s_data))])
+    starsy = np.array([s_data[i][1] for i in range(len(s_data))])
+
+    qsox = np.array([q_data[i][0] for i in range(len(q_data))])
+    qsoy = np.array([q_data[i][1] for i in range(len(q_data))])
+
+    line = linear(m, starsx, b)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    ax.scatter(starsx, starsy, color='r', label='stars')
+    ax.scatter(qsox, qsoy, color='c', label='quasars')
+    ax.plot(starsx, line, color='k')
+    for i in range(len(t_stars)):
+        ax.scatter(t_stars[i][0], t_stars[i][1], color='r', marker='*')
+    for i in range(len(t_qsos)):
+        ax.scatter(t_qsos[i][0], t_qsos[i][1], color='c', marker='*')
+
+    ax.set_xlabel('g-z')
+    ax.set_ylabel('r-W1')
+    ax.legend()
+    plt.show()
+
 
 if __name__ == '__main__':
     # JAB Code for 'training' the classifications with proper cuts
@@ -105,8 +133,6 @@ if __name__ == '__main__':
     stars = vstack([objs[i] for i in star_index])
 
     # JAB Use funtion to test a few objects
-    test = objs[0:21]
-    knn, t_data = qso_color_cuts(qsos, stars, test)
-    
-    predicted_class = np.array(knn.predict(t_data))
-    print(predicted_class)
+    test = objs[0:61]
+    pclass, s_data, q_data, t_data = qso_color_cuts(qsos, stars, test)
+    plot_classified(pclass, s_data, q_data, t_data, 1, -1.1)
