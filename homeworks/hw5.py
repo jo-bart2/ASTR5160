@@ -1,5 +1,4 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from astropy.table import Table
 from tasks.week10.class18 import flux_to_mag
 from tasks.week13.class23 import linear
@@ -32,26 +31,19 @@ def splendid_function(datatable):
     # the file testhw5.py
     m = 1
     b = -1.1
-    x = np.linspace(min(gz[np.isfinite(gz)]), max(gz[np.isfinite(gz)]), len(gz))
-    line = linear(m, x, b)
+    line = linear(m, gz, b)
     
     ii_line = (rw > line) & (gz > -1)
-#    ii_cuts = (datatable['TYPE'] == 'PSF') & (datatable['FLUX_G'] > 0) & \
-#    (datatable['FLUX_Z'] > 0) & (datatable['FLUX_W1'] > 0) & (datatable['FLUX_R'] > 0) & (r < 19)
     ii_cuts = (datatable['TYPE'] == 'PSF') & (r < 19)
 
     ii_sq = ii_line & ii_cuts
 
-    plt.scatter(gz[ii_cuts], rw[ii_cuts])
-    plt.scatter(gz[ii_sq], rw[ii_sq], color='r')
-    plt.plot(x, line, color='k')
-    plt.show()
     return ii_sq
     
     
 
 if __name__ == '__main__':
-    table = Table.read('/d/scratch/ASTR5160/data/legacysurvey/dr9/south/sweep/9.0/sweep-180p030-190p035.fits')
+    table = Table.read('../../sweep-180p030-190p035.fits')
     ii = splendid_function(table)
     print(ii)
     print(len(table[ii]))
