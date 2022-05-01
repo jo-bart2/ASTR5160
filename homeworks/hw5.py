@@ -1,5 +1,6 @@
 import numpy as np
 from astropy.table import Table
+import argparse
 from tasks.week10.class18 import flux_to_mag
 from tasks.week13.class23 import linear
 
@@ -16,12 +17,13 @@ def splendid_function(datatable):
     ii_sq: :class: '~numpy.ndarray'
        A Boolean array showing which objects in datatable are qsos
     '''
-    # JAB Determine g, z, r, and W1 magnitudes then make g-z and r-W1
+    # JAB Determine g, z, r, and W1 magnitudes for each object
     r = flux_to_mag(np.array(datatable['FLUX_R']))
     g = flux_to_mag(np.array(datatable['FLUX_G']))
     z = flux_to_mag(np.array(datatable['FLUX_Z']))
     w1 = flux_to_mag(np.array(datatable['FLUX_W1']))
 
+    # JAB Calculate the color cuts for g-z and r-W1
     gz = g - z
     rw = r - w1
     
@@ -34,16 +36,29 @@ def splendid_function(datatable):
     line = linear(m, gz, b)
     
     ii_line = (rw > line) & (gz > -1)
+
+    # JAB The objects should also be of type PSF and have r < 19
     ii_cuts = (datatable['TYPE'] == 'PSF') & (r < 19)
 
     ii_sq = ii_line & ii_cuts
 
     return ii_sq
-    
-    
 
 if __name__ == '__main__':
-    table = Table.read('../../sweep-180p030-190p035.fits')
+    # JAB Provide informative help message and request file path
+    parser = argparse.ArgumentParser('''This module completes the tasks put forth in Homework 5:
+    It takes a path to a .fits file and prints the number of quasars present
+    ''')
+    parser.add_argument('filepath', help='The full path to the .fits file')
+    args = parser.parse_args()
+    filepath = args.filepath
+
+    # JAB Reads in the .fits file
+    table = Table.read(filepath)
+
+    # JAB Finds the number of quasars present and prints it
     ii = splendid_function(table)
-    print(ii)
-    print(len(table[ii]))
+    qsos = table[ii]
+
+    print('There are {} quasars present in the field'.format(len(qsos)))
+    
