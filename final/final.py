@@ -136,7 +136,7 @@ def use_emcee(starts, post, args, labels, data, steps=False, truths=None):
 
     Returns
     -------
-
+    None
     '''
     # JAB Run emcee based on tutorial and Class 26
     nparams = len(starts)
@@ -222,4 +222,14 @@ if __name__ == '__main__':
     
     use_emcee(qstarts, log_posterior_quad, qargs, qlabels, datarray)
     
+    # JAB Comment on a2 probability distribution
+    comments = '''Based on the posterior probability distribution of a2 generated in\
+ the corner plot, I would argue that the quadratic model is justified to best represent\
+ the data. 
 
+In order for the linear model to be sufficient, the probability distribution would need\
+ to have a significant portion of accepted values of a2 = 0. Instead, only the very tail\
+ of the distribution contains zero. This means that there is only a small probability\
+ that the linear distribution fits the data.'''
+
+    print(comments)
