@@ -106,7 +106,7 @@ def log_posterior_quad(params, xs, ys, yerrs, minmax):
 
     return lnpost
 
-def use_emcee(starts, post, args, labels, steps=False, truths=None):
+def use_emcee(starts, post, args, labels, data, steps=False, truths=None):
     '''
     Parameters
     ----------
@@ -124,6 +124,9 @@ def use_emcee(starts, post, args, labels, steps=False, truths=None):
     labels: :class: '~numpy.ndarray', 'list'
        Array or list containing strings with the names of the parameters
 
+    data: :class: '~numpy.ndarray'
+       Array containing the arrays of x, y, and yerr from the given data
+
     steps: :class: 'Boolean'
        A boolean to determine whether or not to plot the steps and parameters.
        Default is False
@@ -133,22 +136,19 @@ def use_emcee(starts, post, args, labels, steps=False, truths=None):
 
     Returns
     -------
-    fits: :class: 'list'
-       A list of lists containing the best fit parameters in the form of
-       [param name, best value, lower bound, upper bound]
+
     '''
     # JAB Run emcee based on tutorial and Class 26
     nparams = len(starts)
-    pos = np.array([m_start, b_start]) + 1e-4 * np.random.randn(32, nparams)
+    pos = np.array(starts) + 1e-4 * np.random.randn(32, nparams)
     nwalkers, ndim = pos.shape
 
     sampler = emcee.EnsembleSampler(nwalkers, ndim, post, args=args)
     sampler.run_mcmc(pos, 5000, progress=True)
-
     
     # JAB Plot steps and parameters
     if steps:
-        fig, axes = plt.subplots(2, figsize=(10, 7), sharex=True)
+        fig, axes = plt.subplots(nparams, figsize=(10, 7), sharex=True)
         samples = sampler.get_chain()
         for i in range(ndim):
             ax = axes[i]
@@ -171,9 +171,24 @@ def use_emcee(starts, post, args, labels, steps=False, truths=None):
     for i in range(ndim):
         mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
         q = np.diff(mcmc)
-        fits.append([labels[i], mcmc[1], q[0], q[1]])
+        print('{} = {} -{} +{}'.format(labels[i], mcmc[1], q[0], q[1]))
+        fits.append(mcmc[1])
 
-    return fits
+    # JAB Plot best fit over the data
+    xs, ys, yerrs = data
+    if nparams == 2:
+        ymodel = linear(fits[0], xs, fits[1])
+    elif nparams == 3:
+        ymodel = quadratic(xs, fits[0], fits[1], fits[2])
+    
+    plt.plot(xs, ymodel, linestyle='dashed', color='forestgreen', label='Best Fit')
+    plt.errorbar(xs, ys, yerr=yerrs, color="k", label='Data Points', fmt='o')
+    plt.xlabel("x")
+    plt.ylabel("y")
+    plt.legend()
+    plt.show()
+    
+    return
 
 if __name__ == '__main__':
     # JAB Read in data file
@@ -181,16 +196,30 @@ if __name__ == '__main__':
     data = Table.read(filepath)
 
     x, y, yerr = data['x'], data['y'], data['yerr']
+    datarray = np.array([x, y, yerr])
 
     # JAB Use emcee to find linear fit
-    nparams = 2
     m_start = -1
-    b_start = 5
-    mrange = [-2,1]
-    brange = [-5,10]
-    args = (x, y, (yerr**2), mrange, brange)
-    labels = ['m', 'b']
+    b_start = 3
+    mrange = [-2, 1]
+    brange = [-5, 10]
+    linargs = (x, y, (yerr**2), mrange, brange)
+    linlabels = ['m', 'b']
+    lstarts = [m_start, b_start]
 
-    fits = use_emcee([m_start, b_start], log_posterior, args, labels, steps=True)
-    print(fits[0])
-    print(fits[1])
+    use_emcee(lstarts, log_posterior, linargs, linlabels, datarray)
+
+    # JAB Use emcee to find quadratic fit
+    a2_start = 0.05
+    a1_start = -2
+    a0_start = 7
+    a2range = [-1, 1]
+    a1range = [-5, 5]
+    a0range = [-5, 18]
+    qargs = (x, y, yerr, [a2range, a1range, a0range])
+    qlabels = ['a2', 'a1', 'a0']
+    qstarts = [a2_start, a1_start, a0_start]
+    
+    use_emcee(qstarts, log_posterior_quad, qargs, qlabels, datarray)
+    
+
