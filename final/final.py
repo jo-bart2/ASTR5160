@@ -4,24 +4,48 @@ import emcee
 import corner
 from astropy.table import Table
 from tasks.week13.class23 import linear
+from tasks.week14.class26 import log_prior, log_posterior
 
-# JAB Rewrite functions from class26.py
-# JAB Separate function for the log prior
-def log_prior(params, minmax):
+# JAB Function that returns y value of quadratic
+def quadratic(xs, a2, a1, a0):
+    '''
+    Parameters
+    ----------
+    xs: :class: '~numpy.ndarray', 'int', 'float'
+       An array or single value for which to find the corresponding y
+
+    a2: :class: 'int', 'float'
+       The second order constant in the quadratic
+
+    a1: :class: 'int', 'float'
+       The first order constant in the quadtratic
+    
+    a0: :class: 'int', 'float'
+       The zeroth order constant in the quadratic
+
+    Returns
+    -------
+    y: :class: '~numpy.ndarray', 'int', 'float'
+       An array or single value representing the output of the equation
+       y = a2*x^2 + a1*x + a0
+    '''
+    y = a2*(xs**2) + a1*xs + a0
+
+    return y
+
+# JAB Rewrite prior and posterior functions for quadratic
+def log_prior_quad(params, minmax):
     '''
     Parameters
     ----------
     params: :class: 'list', '~numpy.ndarray'
-       An array or list of the values for the parameters of the function.
-       Should always be of length 3, but first term is zero if linear
-
-       Linear: m and b in the shape [0, m, b]
-       Quadratic: a2, a1, and a0 in the shape [a2, a1, a0]
+       An array or list of the three values for a2, a1, and a0 in the shape 
+       of [a2, a1, a0]
 
     minmax: :class: 'list', '~numpy.ndarray'
-       An array or list of arrays determining the prior range of the params
-       in the samer order as the params array.
-       Example: shape of [[], [m_min, m_max], [b_min, b_max]] for linear
+       An array or list of arrays each containing the two values determining 
+       the prior range of the params. Of the same length as params and in the 
+       shape of [[a2_min, a2_max], [a1_min, a1_max], [a0_min, a0_max]]
 
     Returns
     -------
@@ -29,9 +53,7 @@ def log_prior(params, minmax):
        The value of the natural log of the prior
     '''
     a2, a1, a0 = params
-    if a2 == 0:
-        minmax[0] = np.array([-1, 1])
-
+    
     a2_min, a2_max = minmax[0]
     a1_min, a1_max = minmax[1]
     a0_min, a0_max = minmax[2]
@@ -43,19 +65,14 @@ def log_prior(params, minmax):
 
     return lnprior
 
-
-# JAB Rewrite posterior probability function
-def log_posterior(params, xs, ys, yerrs, minmax):
+def log_posterior_quad(params, xs, ys, yerrs, minmax):
     '''
     Parameters
     ----------
     params: :class: 'list', '~numpy.ndarray'
-       An array or list of the values for the parameters of the function.
-       Should always be of length 3, but first term is zero if linear
+       An array or list of the three values for a2, a1, and a0 in the shape 
+       of [a2, a1, a0]
 
-       Linear: m and b in the shape [0, m, b]
-       Quadratic: a2, a1, and a0 in the shape [a2, a1, a0]
-    
     xs: :class: '~numpy.ndarray'
        An array of the x values of the data
     
@@ -63,24 +80,23 @@ def log_posterior(params, xs, ys, yerrs, minmax):
        An array of the y values of the data
 
     yerrs: :class: '~numpy.ndarray'
-       An array of the errors of the data
-
+       An array of the errors in y of the data
+    
     minmax: :class: 'list', '~numpy.ndarray'
-       An array or list of arrays determining the prior range of the params
-       in the samer order as the params array.
-       Example: shape of [[], [m_min, m_max], [b_min, b_max]] for linear
+       An array or list of arrays each containing the two values determining 
+       the prior range of the params. Of the same length as params and in the 
+       shape of [[a2_min, a2_max], [a1_min, a1_max], [a0_min, a0_max]]
 
     Returns
     -------
     lnpost: :class: 'float'
        The natural log the of the posterior probability
     '''
-    # JAB Calculate the prior
-    lnprior = log_prior(params, minmax)
+    a2, a1, a0 = params
+    lnprior = log_prior_quad(params, minmax)
 
     # JAB Calculate the predicted y values for the model
-    a2, a1, a0 = params
-    ymodel = linear(a1, xs, a0) + a2*(xs**2)
+    ymodel = quadratic(xs, a2, a1, a0)
 
     # JAB Calculate the natural log of the likelihood
     lnlike = (-0.5)*sum(((ys - ymodel)**2)/(yerrs**2) + np.log(2*np.pi*(yerrs**2)))
@@ -90,6 +106,7 @@ def log_posterior(params, xs, ys, yerrs, minmax):
 
     return lnpost
 
+
 if __name__ == '__main__':
     # JAB Read in data file
     filepath = '/d/scratch/ASTR5160/final/dataxy.fits'
@@ -98,5 +115,36 @@ if __name__ == '__main__':
     x, y, yerr = data['x'], data['y'], data['yerr']
 
     # JAB Use emcee to find linear fit
+    nparams = 2
+    m_start = -1
+    b_start = 5
+
+    pos = np.array([m_start, b_start]) + 1e-4 * np.random.randn(32, nparams)
+    nwalkers, ndim = pos.shape
+
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_posterior, args=(x, y, (yerr**2), 
+                                                                         [-5,5], [-5,15]))
+
+    sampler.run_mcmc(pos, 5000, progress=True)
+
+    # JAB Plot steps and parameters
+    fig, axes = plt.subplots(2, figsize=(10, 7), sharex=True)
+    samples = sampler.get_chain()
+    labels = ["m", "b"]
+    for i in range(ndim):
+        ax = axes[i]
+        ax.plot(samples[:, :, i], "k", alpha=0.3)
+        ax.set_xlim(0, len(samples))
+        ax.set_ylabel(labels[i])
+        ax.yaxis.set_label_coords(-0.1, 0.5)
+
+    axes[-1].set_xlabel("step number");
+    plt.show()
+
+    # JAB Make corner plot of results with true values as m=3 and b=4.8
+    flat_samples = sampler.get_chain(discard=100, thin=15, flat=True)
+
+    fig = corner.corner(flat_samples, labels=labels, truths=[3.0, 4.8]);
+    plt.show()
     
     
