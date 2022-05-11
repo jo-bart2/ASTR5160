@@ -106,6 +106,74 @@ def log_posterior_quad(params, xs, ys, yerrs, minmax):
 
     return lnpost
 
+def use_emcee(starts, post, args, labels, steps=False, truths=None):
+    '''
+    Parameters
+    ----------
+    starts: :class: '~numpy.ndarray', 'list'
+       Array or list of starting values of the parameters
+
+    post: :class: 'function'
+       The function for the posterior that will be fed in to the EnsembleSampler
+
+    args: :class: 'tuple'
+       A tuple containing the arguments other than the starting values to be 
+       entered into the posterior function.
+       Example: (xs, ys, var, mminmax, bminmax) for log_posterior
+
+    labels: :class: '~numpy.ndarray', 'list'
+       Array or list containing strings with the names of the parameters
+
+    steps: :class: 'Boolean'
+       A boolean to determine whether or not to plot the steps and parameters.
+       Default is False
+
+    truths: :class: '~numpy.ndarray', 'list'
+       Array or list with the true values of the parameters, if known
+
+    Returns
+    -------
+    fits: :class: 'list'
+       A list of lists containing the best fit parameters in the form of
+       [param name, best value, lower bound, upper bound]
+    '''
+    # JAB Run emcee based on tutorial and Class 26
+    nparams = len(starts)
+    pos = np.array([m_start, b_start]) + 1e-4 * np.random.randn(32, nparams)
+    nwalkers, ndim = pos.shape
+
+    sampler = emcee.EnsembleSampler(nwalkers, ndim, post, args=args)
+    sampler.run_mcmc(pos, 5000, progress=True)
+
+    
+    # JAB Plot steps and parameters
+    if steps:
+        fig, axes = plt.subplots(2, figsize=(10, 7), sharex=True)
+        samples = sampler.get_chain()
+        for i in range(ndim):
+            ax = axes[i]
+            ax.plot(samples[:, :, i], "k", alpha=0.3)
+            ax.set_xlim(0, len(samples))
+            ax.set_ylabel(labels[i])
+            ax.yaxis.set_label_coords(-0.1, 0.5)
+
+        axes[-1].set_xlabel("step number");
+        plt.show()
+
+    # JAB Make corner plot of results with true values if entered
+    flat_samples = sampler.get_chain(discard=100, thin=15, flat=True)
+
+    fig = corner.corner(flat_samples, labels=labels, truths=truths);
+    plt.show()
+
+    # JAB Determine the best values of the parameters
+    fits = []
+    for i in range(ndim):
+        mcmc = np.percentile(flat_samples[:, i], [16, 50, 84])
+        q = np.diff(mcmc)
+        fits.append([labels[i], mcmc[1], q[0], q[1]])
+
+    return fits
 
 if __name__ == '__main__':
     # JAB Read in data file
@@ -118,33 +186,11 @@ if __name__ == '__main__':
     nparams = 2
     m_start = -1
     b_start = 5
+    mrange = [-2,1]
+    brange = [-5,10]
+    args = (x, y, (yerr**2), mrange, brange)
+    labels = ['m', 'b']
 
-    pos = np.array([m_start, b_start]) + 1e-4 * np.random.randn(32, nparams)
-    nwalkers, ndim = pos.shape
-
-    sampler = emcee.EnsembleSampler(nwalkers, ndim, log_posterior, args=(x, y, (yerr**2), 
-                                                                         [-5,5], [-5,15]))
-
-    sampler.run_mcmc(pos, 5000, progress=True)
-
-    # JAB Plot steps and parameters
-    fig, axes = plt.subplots(2, figsize=(10, 7), sharex=True)
-    samples = sampler.get_chain()
-    labels = ["m", "b"]
-    for i in range(ndim):
-        ax = axes[i]
-        ax.plot(samples[:, :, i], "k", alpha=0.3)
-        ax.set_xlim(0, len(samples))
-        ax.set_ylabel(labels[i])
-        ax.yaxis.set_label_coords(-0.1, 0.5)
-
-    axes[-1].set_xlabel("step number");
-    plt.show()
-
-    # JAB Make corner plot of results with true values as m=3 and b=4.8
-    flat_samples = sampler.get_chain(discard=100, thin=15, flat=True)
-
-    fig = corner.corner(flat_samples, labels=labels, truths=[3.0, 4.8]);
-    plt.show()
-    
-    
+    fits = use_emcee([m_start, b_start], log_posterior, args, labels, steps=True)
+    print(fits[0])
+    print(fits[1])
